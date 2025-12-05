@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taryel Hüseynzadə</title>
+    <style>
+        /* --- CSS DƏYİŞƏNLƏRİ --- */
+        :root {
+            --primary-color: #007bff; 
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --card-bg: #fff;
+            --panel-bg: #fff;
+            --header-bg-scrolled: #333;
+            --header-text: #fff;
+            --shadow: rgba(0,0,0,0.1);
+            --base-size: 16px;
+        }
+
+        body.dark-theme {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --panel-bg: #1e1e1e;
+            --header-bg-scrolled: #000;
+            --header-text: #e0e0e0;
+            --shadow: rgba(255,255,255,0.05);
+        }
+
+        html.large-text { font-size: 120%; }
+        html.no-anim *, html.no-anim *:before, html.no-anim *:after { transition: none !important; scroll-behavior: auto !important; animation: none !important; }
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: Arial, sans-serif; margin: 0; padding: 0;
+            background-color: var(--bg-color); color: var(--text-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background: transparent; color: var(--header-text); padding: 20px 5%;
+            position: fixed; top: 0; width: 90%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: padding 0.4s ease, background-color 0.4s ease;
+        }
+        header h1 { margin: 0; font-size: 2rem; color: inherit; transition: font-size 0.4s ease; }
+        header.scrolled { padding: 10px 5%; background-color: var(--header-bg-scrolled); }
+        header.scrolled h1 { font-size: 1.5rem; }
+
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        
+        #special-features-btn { background: none; border: none; cursor: pointer; padding: 0; color: var(--header-text); display: flex; align-items: center; justify-content: center; }
+        #special-features-btn svg { width: 28px; height: 28px; transition: transform 0.3s ease; fill: currentColor; }
+        #special-features-btn:hover svg { transform: scale(1.1); fill: var(--primary-color); }
+        
+        #menu-toggle { background: none; border: none; cursor: pointer; padding: 0; display: flex; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; z-index: 2001; }
+        #menu-toggle .line { width: 100%; height: 3px; background-color: var(--header-text); border-radius: 2px; }
+        
+        /* --- MENYU --- */
+        #fullscreen-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); z-index: 2000;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        #fullscreen-menu.active { opacity: 1; visibility: visible; }
+        #fullscreen-menu ul { list-style: none; padding: 0; text-align: center; margin: 0; }
+        #fullscreen-menu li { margin: 20px 0; }
+        #fullscreen-menu a { color: white; text-decoration: none; font-size: 2rem; transition: color 0.3s ease; }
+        #fullscreen-menu a:hover { color: var(--primary-color); }
+        #menu-close { position: absolute; top: 30px; right: 5%; background: none; border: none; color: white; font-size: 40px; cursor: pointer; }
+
+        @media (min-width: 768px) {
+            #menu-toggle, #menu-close { display: none !important; }
+            
+            header {
+                flex-direction: column;
+                justify-content: center;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+            header.scrolled { padding-top: 10px; padding-bottom: 10px; }
+            #branding { margin-bottom: 10px; }
+            .header-controls { position: absolute; right: 5%; top: 25px; }
+            header.scrolled .header-controls { top: 15px; }
+
+            #fullscreen-menu {
+                position: static; width: 100%; height: auto; background-color: transparent;
+                display: flex; flex-direction: row; justify-content: center;
+                opacity: 1; visibility: visible; z-index: auto; transform: none;
+            }
+            #fullscreen-menu ul { display: flex; flex-direction: row; gap: 40px; padding: 0; }
+            #fullscreen-menu li { margin: 0; }
+            #fullscreen-menu a { font-size: 1rem; color: var(--header-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        }
+        
+        #banner { height: 75vh; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: #fff; }
+        .banner-text h2 { font-size: 3rem; }
+        .banner-text p { font-size: 1.25rem; }
+
+        .container { width: 80%; margin: auto; overflow: hidden; padding: 40px 0; }
+        footer { background: #333; color: #fff; text-align: center; padding: 30px; }
+
+        /* --- ACTIVITY PANELS --- */
+        .activity-panel {
+            position: fixed; top: 0; right: 0; width: 100%; height: 100%;
+            background-color: var(--panel-bg); color: var(--text-color); z-index: 3000;
+            transform: translateX(100%); transition: transform 0.4s ease-in-out;
+            display: flex; flex-direction: column;
+        }
+        .activity-panel.active { transform: translateX(0); }
+        .panel-header { display: flex; align-items: center; padding: 15px 5%; background-color: #333; color: #fff; }
+        .panel-back-btn { background: none; border: none; cursor: pointer; margin-right: 20px; padding: 0; display: flex; align-items: center; }
+        .panel-back-btn img { width: 20px; height: auto; display: block; }
+        .panel-back-btn:hover { transform: translateX(-3px); }
+        .panel-header h2 { margin: 0; font-size: 1.5rem; }
+        .panel-content { padding: 20px 5%; flex-grow: 1; overflow-y: auto; }
+
+        @media (min-width: 768px) { 
+            #settings-panel { width: 100%; top: 110px; height: calc(100% - 110px); box-shadow: none; z-index: 900; }
+            #settings-panel .panel-content { max-width: 800px; margin: 0 auto; }
+            #about-panel { width: 400px; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 3000; top: 0; height: 100%; }
+        }
+
+        .settings-section { margin-bottom: 30px; text-align: left; }
+        .settings-section h3 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .setting-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; }
+        .option-buttons { display: flex; gap: 10px; }
+        .option-btn { padding: 10px; border: 2px solid #ccc; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 5px; font-size: 0.9rem; flex: 1; transition: all 0.3s ease; text-align: center; }
+        .option-btn.active { border-color: var(--primary-color); background-color: var(--primary-color); color: white; }
+        .color-options { display: flex; gap: 15px; flex-wrap: wrap; }
+        .color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: var(--text-color); transform: scale(1.1); }
+
+        .profile-header { margin-bottom: 30px; text-align: center; }
+        .profile-header img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #f4f4f4; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .profile-header h2 { margin-top: 15px; margin-bottom: 0; font-size: 1.8rem; color: var(--text-color); }
+        
+        .github-btn { display: inline-flex; align-items: center; gap: 10px; background-color: #24292e; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; transition: background-color 0.3s ease, transform 0.3s ease; }
+        .github-btn:hover { background-color: #444; transform: translateY(-2px); }
+        .github-btn svg { fill: #fff; width: 20px; height: 20px; }
+
+        /* KART STİLLƏRİ */
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow); text-align: center; max-width: 600px; margin: 0 auto 30px auto; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        
+        .youtube-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
+        /* Yeni Video İkonu Stili */
+        .video-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
+        
+        .card h3 { margin: 10px 0; font-size: 1.5rem; }
+        .card p { color: var(--text-color); margin-bottom: 25px; opacity: 0.8; }
+        
+        .btn-youtube { display: inline-block; background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 200% 100%; color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: all 0.4s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .btn-youtube:hover { background-position: 100% 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transform: scale(1.05); }
+
+        /* Standart Düymə Stili (Yeni Videolar kartı üçün) */
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div id="branding"><h1 id="txt-brand">Taryel Hüseynzadə</h1></div>
+        
+        <nav id="fullscreen-menu">
+            <button id="menu-close">&times;</button>
+            <ul>
+                <li><a href="#about" id="link-about">Haqqında</a></li>
+                <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
+                <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
+                <li><a href="#settings" id="link-settings">Ayarlar</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-controls">
+            <button id="special-features-btn" aria-label="Xüsusi Özəlliklər">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button id="menu-toggle"><span class="line"></span><span class="line"></span><span class="line"></span></button>
+        </div>
+    </header>
+
+    <aside id="settings-panel" class="activity-panel">
+        <div class="panel-header">
+            <button id="settings-back-btn" class="panel-back-btn">
+                <img src="https://i.postimg.cc/dVBWkBPJ/back-button.png" alt="Geri">
+            </button>
+            <h2 id="txt-settings-title">Ayarlar</h2>
+        </div>
+        <div class="panel-content">
+            <div class="settings-section">
+                <h3 id="txt-lang-title">Dil (Language)</h3>
+                <div class="option-buttons">
+                    <button class="option-btn lang-btn" data-lang="az">AZ</button>
+                    <button class="option-btn lang-btn" data-lang="en">EN</button>
+                    <button class="option-btn lang-btn" data-lang="ru">RU</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-access-title">Xüsusi İmkanlar</h3>
+                <span class="setting-label" id="txt-label-text">Mətn Ölçüsü</span>
+                <div class="option-buttons">
+                    <button id="text-normal" class="option-btn active">Normal</button>
+                    <button id="text-large" class="option-btn">Böyük</button>
+                </div>
+                <span class="setting-label" id="txt-label-anim">Animasiyalar</span>
+                <div class="option-buttons">
+                    <button id="anim-on" class="option-btn active">Aktiv</button>
+                    <button id="anim-off" class="option-btn">Dayandır</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-theme-title">Tema</h3>
+                <div class="option-buttons">
+                    <button id="theme-light" class="option-btn">İşıqlı</button>
+                    <button id="theme-dark" class="option-btn">Qaranlıq</button>
+                    <button id="theme-system" class="option-btn">Sistem</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-color-title">Rəng Palitrası</h3>
+                <div class="color-options">
+                    <button class="color-btn" data-color="#007bff" style="background-color: #007bff;"></button>
+                    <button class="color-btn" data-color="#e74c3c" style="background-color: #e74c3c;"></button>
+                    <button class="color-btn" data-color="#28a745" style="background-color: #28a745;"></button>
+                    <button class="color-btn" data-color="#ffc107" style="background-color: #ffc107;"></button>
+                    <button class="color-btn" data-color="#9b59b6" style="background-color: #9b59b6;"></button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <aside id="about-panel" class="activity-panel">
+        <div class="panel-header">
+            <button id="about-back-btn" class="panel-back-btn">
+                <img src="https://i.postimg.cc/dVBWkBPJ/back-button.png" alt="Geri">
+            </button>
+            <h2 id="txt-about-title">Haqqında</h2>
+        </div>
+        <div class="panel-content">
+            <div class="profile-header">
+                <img src="logo.jpg" alt="Logo">
+                <h2>Taryel Hüseynzadə</h2>
+            </div>
+            <a href="https://GitHub.com/TaryelHuseynzade/TaryelHuseynzade.github.io" target="_blank" class="github-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                Mənbə Kodu
+            </a>
+        </div>
+    </aside>
+
+    <section id="banner">
+        <div class="banner-text">
+            <h2 id="txt-welcome">Xoş Gəlmisiniz!</h2>
+            <p id="txt-welcome-desc">Səhifəni aşağı sürüşdürərək kəşf edin</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- YouTube Kanalı Kartı -->
+        <section class="card">
+            <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            </svg>
+            <h3 id="txt-yt-title">YouTube Kanalım</h3>
+            <p id="txt-yt-desc">Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.</p>
+            <a href="https://youtube.com/@taryelhuseynzade?si=gS3cNvQuY6zTR0ZL" target="_blank" class="btn-youtube" id="txt-yt-btn">Kanalı Ziyarət Et</a>
+        </section>
+
+        <!-- YENİ: VİDEOLAR KARTI -->
+        <section class="card">
+            <!-- Play İkonu -->
+            <svg class="video-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            </svg>
+            <h3 id="txt-videos-title">Videolar</h3>
+            <p id="txt-videos-desc">Ən son videolarımı izləmək üçün klikləyin.</p>
+            <a href="https://www.youtube.com/@taryelhuseynzade/videos" target="_blank" class="btn-primary" id="txt-videos-btn">İzlə</a>
+        </section>
+
+        <div style="height: 300px;"></div>
+    </div>
+    
+    <footer><p>Taryel Hüseynzadə &copy; 2025</p></footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('main-header');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuClose = document.getElementById('menu-close');
+            const fullscreenMenu = document.getElementById('fullscreen-menu');
+            
+            const settingsPanel = document.getElementById('settings-panel');
+            const aboutPanel = document.getElementById('about-panel');
+            
+            const openSettingsLink = document.querySelector('a[href="#settings"]');
+            const openAboutLink = document.querySelector('a[href="#about"]');
+            
+            const settingsBackBtn = document.getElementById('settings-back-btn');
+            const aboutBackBtn = document.getElementById('about-back-btn');
+            const specialFeaturesBtn = document.getElementById('special-features-btn');
+
+            window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
+            menuToggle.addEventListener('click', () => fullscreenMenu.classList.add('active'));
+            menuClose.addEventListener('click', () => fullscreenMenu.classList.remove('active'));
+            
+            openSettingsLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                fullscreenMenu.classList.remove('active');
+                setTimeout(() => { settingsPanel.classList.add('active'); }, 200);
+            });
+            settingsBackBtn.addEventListener('click', () => { settingsPanel.classList.remove('active'); });
+
+            openAboutLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                fullscreenMenu.classList.remove('active');
+                setTimeout(() => { aboutPanel.classList.add('active'); }, 200);
+            });
+            aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
+
+            specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
+
+            const themeLightBtn = document.getElementById('theme-light');
+            const themeDarkBtn = document.getElementById('theme-dark');
+            const themeSystemBtn = document.getElementById('theme-system');
+            const textNormalBtn = document.getElementById('text-normal');
+            const textLargeBtn = document.getElementById('text-large');
+            const animOnBtn = document.getElementById('anim-on');
+            const animOffBtn = document.getElementById('anim-off');
+            const colorBtns = document.querySelectorAll('.color-btn');
+            const langBtns = document.querySelectorAll('.lang-btn');
+
+            const translations = {
+                az: {
+                    brand: "Taryel Hüseynzadə", 
+                    linkAbout: "Haqqında", linkLicense: "Açıq mənbə lisenziyası", linkHelp: "Kömək & Dəstək", linkSettings: "Ayarlar", 
+                    settingsTitle: "Ayarlar", aboutTitle: "Haqqında", langTitle: "Dil (Language)", accessTitle: "Xüsusi İmkanlar", labelText: "Mətn Ölçüsü", labelAnim: "Animasiyalar", textNorm: "Normal", textLarge: "Böyük", animOn: "Aktiv", animOff: "Dayandır", themeTitle: "Tema", themeLight: "İşıqlı", themeDark: "Qaranlıq", themeSystem: "Sistem", colorTitle: "Rəng Palitrası", welcome: "Xoş Gəlmisiniz!", welcomeDesc: "Səhifəni aşağı sürüşdürərək kəşf edin", 
+                    ytTitle: "YouTube Kanalım", ytDesc: "Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.", ytBtn: "Kanalı Ziyarət Et",
+                    // Yeni Videolar Kartı Tərcümələri
+                    videosTitle: "Videolar", videosDesc: "Ən son videolarımı izləmək üçün klikləyin.", videosBtn: "İzlə"
+                },
+                en: {
+                    brand: "Taryel Huseynzade", 
+                    linkAbout: "About", linkLicense: "Open Source License", linkHelp: "Help & Support", linkSettings: "Settings", 
+                    settingsTitle: "Settings", aboutTitle: "About", langTitle: "Language", accessTitle: "Accessibility", labelText: "Text Size", labelAnim: "Animations", textNorm: "Normal", textLarge: "Large", animOn: "On", animOff: "Off", themeTitle: "Theme", themeLight: "Light", themeDark: "Dark", themeSystem: "System", colorTitle: "Color Palette", welcome: "Welcome!", welcomeDesc: "Scroll down to discover", 
+                    ytTitle: "My YouTube Channel", ytDesc: "Subscribe to my channel to watch videos and stay updated.", ytBtn: "Visit Channel",
+                    // New Videos Card Translations
+                    videosTitle: "Videos", videosDesc: "Click to watch my latest videos.", videosBtn: "Watch"
+                },
+                ru: {
+                    brand: "Тариэль Гусейнзаде", 
+                    linkAbout: "О нас", linkLicense: "Лицензия Open Source", linkHelp: "Помощь и поддержка", linkSettings: "Настройки", 
+                    settingsTitle: "Настройки", aboutTitle: "О нас", langTitle: "Язык (Language)", accessTitle: "Спец. возможности", labelText: "Размер текста", labelAnim: "Анимации", textNorm: "Норма", textLarge: "Крупный", animOn: "Вкл", animOff: "Выкл", themeTitle: "Тема", themeLight: "Светлая", themeDark: "Тёмная", themeSystem: "Системная", colorTitle: "Цветовая палитра", welcome: "Добро пожаловать!", welcomeDesc: "Прокрутите вниз, чтобы узнать больше", 
+                    ytTitle: "Мой YouTube канал", ytDesc: "Подпишитесь на мой канал, чтобы смотреть видео и быть в курсе новостей.", ytBtn: "Посетить канал",
+                    // New Videos Card Translations
+                    videosTitle: "Видео", videosDesc: "Нажмите, чтобы посмотреть мои последние видео.", videosBtn: "Смотреть"
+                }
+            };
+
+            function applyLanguage(lang) {
+                langBtns.forEach(btn => { btn.classList.remove('active'); if(btn.dataset.lang === lang) btn.classList.add('active'); });
+                const t = translations[lang];
+                document.getElementById('txt-brand').textContent = t.brand;
+                document.getElementById('link-about').textContent = t.linkAbout;
+                document.getElementById('link-license').textContent = t.linkLicense;
+                document.getElementById('link-help').textContent = t.linkHelp;
+                document.getElementById('link-settings').textContent = t.linkSettings;
+                document.getElementById('txt-settings-title').textContent = t.settingsTitle;
+                document.getElementById('txt-about-title').textContent = t.aboutTitle;
+                document.getElementById('txt-lang-title').textContent = t.langTitle;
+                document.getElementById('txt-access-title').textContent = t.accessTitle;
+                document.getElementById('txt-label-text').textContent = t.labelText;
+                document.getElementById('txt-label-anim').textContent = t.labelAnim;
+                document.getElementById('text-normal').textContent = t.textNorm;
+                document.getElementById('text-large').textContent = t.textLarge;
+                document.getElementById('anim-on').textContent = t.animOn;
+                document.getElementById('anim-off').textContent = t.animOff;
+                document.getElementById('txt-theme-title').textContent = t.themeTitle;
+                document.getElementById('theme-light').textContent = t.themeLight;
+                document.getElementById('theme-dark').textContent = t.themeDark;
+                document.getElementById('theme-system').textContent = t.themeSystem;
+                document.getElementById('txt-color-title').textContent = t.colorTitle;
+                document.getElementById('txt-welcome').textContent = t.welcome;
+                document.getElementById('txt-welcome-desc').textContent = t.welcomeDesc;
+                document.getElementById('txt-yt-title').textContent = t.ytTitle;
+                document.getElementById('txt-yt-desc').textContent = t.ytDesc;
+                document.getElementById('txt-yt-btn').textContent = t.ytBtn;
+                
+                // Videolar kartı tərcüməsi
+                document.getElementById('txt-videos-title').textContent = t.videosTitle;
+                document.getElementById('txt-videos-desc').textContent = t.videosDesc;
+                document.getElementById('txt-videos-btn').textContent = t.videosBtn;
+
+                localStorage.setItem('lang', lang);
+            }
+            langBtns.forEach(btn => btn.addEventListener('click', () => applyLanguage(btn.dataset.lang)));
+
+            function setTextSize(size) { if(size==='large'){document.documentElement.classList.add('large-text'); textLargeBtn.classList.add('active'); textNormalBtn.classList.remove('active');}else{document.documentElement.classList.remove('large-text'); textNormalBtn.classList.add('active'); textLargeBtn.classList.remove('active');} localStorage.setItem('textSize', size); }
+            function setAnimation(state) { if(state==='off'){document.documentElement.classList.add('no-anim'); animOffBtn.classList.add('active'); animOnBtn.classList.remove('active');}else{document.documentElement.classList.remove('no-anim'); animOnBtn.classList.add('active'); animOffBtn.classList.remove('active');} localStorage.setItem('animation', state); }
+            textNormalBtn.addEventListener('click', () => setTextSize('normal')); textLargeBtn.addEventListener('click', () => setTextSize('large')); animOnBtn.addEventListener('click', () => setAnimation('on')); animOffBtn.addEventListener('click', () => setAnimation('off'));
+            function applyTheme(n){themeLightBtn.classList.remove('active');themeDarkBtn.classList.remove('active');themeSystemBtn.classList.remove('active');if(n==='light')themeLightBtn.classList.add('active');else if(n==='dark')themeDarkBtn.classList.add('active');else themeSystemBtn.classList.add('active');localStorage.setItem('theme',n);let e=n;if(n==='system')e=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(e==='dark')document.body.classList.add('dark-theme');else document.body.classList.remove('dark-theme');}
+            themeLightBtn.addEventListener('click',()=>applyTheme('light'));themeDarkBtn.addEventListener('click',()=>applyTheme('dark'));themeSystemBtn.addEventListener('click',()=>applyTheme('system'));window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('theme')==='system')applyTheme('system');});
+            function applyColor(c){document.documentElement.style.setProperty('--primary-color',c);localStorage.setItem('primaryColor',c);colorBtns.forEach(b=>{b.classList.remove('active');if(b.getAttribute('data-color')===c)b.classList.add('active');});}
+            colorBtns.forEach(b=>b.addEventListener('click',()=>applyColor(b.getAttribute('data-color'))));
+
+            applyTheme(localStorage.getItem('theme') || 'system');
+            applyColor(localStorage.getItem('primaryColor') || '#007bff');
+            applyLanguage(localStorage.getItem('lang') || 'az');
+            setTextSize(localStorage.getItem('textSize') || 'normal');
+            setAnimation(localStorage.getItem('animation') || 'on');
+        });
+    </script>
+</body>
+</html>
