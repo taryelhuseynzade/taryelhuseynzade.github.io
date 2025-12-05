@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- DƏYİŞİKLİK: Vebsayt adı yeniləndi -->
+    <title>Kömək & Dəstək - Taryel Hüseynzadə</title>
+    <style>
+        :root { --base-font-size: 16px; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; font-size: var(--base-font-size); }
+        
+        header { 
+            background: #333; color: #fff; padding: 15px 5%; 
+            display: flex; align-items: center; justify-content: flex-start; gap: 15px; 
+        }
+        header h1 { margin: 0; font-size: 18px; font-weight: bold; }
+        
+        .back-home-btn { display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease, opacity 0.3s ease; }
+        .back-home-btn img { width: 20px; height: auto; display: block; }
+        .back-home-btn:hover { transform: translateX(-3px); opacity: 0.8; }
+
+        .container { width: 80%; margin: auto; padding: 40px 0; }
+        .content-section { padding: 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: 60vh; text-align: left; }
+        .content-section h2 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .content-section p { line-height: 1.6; margin-bottom: 15px; }
+
+        .contact-link { color: #007bff; text-decoration: none; font-weight: bold; }
+        .contact-link:hover { text-decoration: underline; }
+
+        footer { background: #333; color: #fff; text-align: center; padding: 30px; }
+        body.high-contrast, body.high-contrast * { background-color: #000 !important; color: #fff !important; border-color: #fff !important; }
+        html.invert-colors { filter: invert(100%); }
+        body.dark-theme { background-color: #121212; color: #e0e0e0; }
+        body.dark-theme .content-section { background-color: #1e1e1e; color: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-home-btn" aria-label="Ana Səhifəyə Qayıt">
+            <img src="https://i.postimg.cc/dVBWkBPJ/back-button.png" alt="Geri">
+        </a>
+        <div id="branding"><h1>Kömək & Dəstək</h1></div>
+    </header>
+
+    <div class="container">
+        <div class="content-section">
+            <h2>Bizimlə Əlaqə</h2>
+            <p>Hər hansı bir sualınız və ya təklifiniz varsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>
+            
+            <p><strong>E-poçt:</strong> <a href="mailto:taryelibo699@gmail.com" class="contact-link">taryelibo699@gmail.com</a></p>
+            
+            <h3>Tez-tez Verilən Suallar (FAQ)</h3>
+            <p><strong>Sual:</strong> Saytın mövzusunu necə dəyişə bilərəm?<br>
+            <strong>Cavab:</strong> Yuxarı sol küncdəki menyuya daxil olub "Ayarlar" bölməsindən mövzunu (İşıqlı/Qaranlıq) dəyişə bilərsiniz.</p>
+        </div>
+    </div>
+
+    <footer><p>Taryel Hüseynzadə &copy; 2025</p></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement; const body = document.body;
+            function applySavedSettings() {
+                const savedFontSize = localStorage.getItem('fontSize');
+                const savedHighContrast = localStorage.getItem('highContrast') === 'true';
+                const savedInvertColors = localStorage.getItem('invertColors') === 'true';
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') body.classList.add('dark-theme');
+                if (savedFontSize) body.style.fontSize = `${parseInt(savedFontSize, 10)}px`;
+                if (savedHighContrast) body.classList.add('high-contrast');
+                if (savedInvertColors) html.classList.add('invert-colors');
+            }
+            applySavedSettings();
+        });
+    </script>
+</body>
+</html>
