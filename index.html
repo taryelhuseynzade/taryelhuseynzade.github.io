@@ -144,36 +144,18 @@
         .github-btn:hover { background-color: #444; transform: translateY(-2px); }
         .github-btn svg { fill: #fff; width: 20px; height: 20px; }
 
-        /* KART STİLLƏRİ */
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow); text-align: center; max-width: 600px; margin: 0 auto 30px auto; transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        
         .youtube-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
-        /* Yeni Video İkonu Stili */
         .video-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
-        
         .card h3 { margin: 10px 0; font-size: 1.5rem; }
         .card p { color: var(--text-color); margin-bottom: 25px; opacity: 0.8; }
         
         .btn-youtube { display: inline-block; background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 200% 100%; color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: all 0.4s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
         .btn-youtube:hover { background-position: 100% 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transform: scale(1.05); }
 
-        /* Standart Düymə Stili (Yeni Videolar kartı üçün) */
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-        }
+        .btn-primary { display: inline-block; background-color: var(--primary-color); color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -184,6 +166,9 @@
             <button id="menu-close">&times;</button>
             <ul>
                 <li><a href="#about" id="link-about">Haqqında</a></li>
+                <!-- YENİ LİNK -->
+                <li><a href="#videos" id="link-videos">Videolar</a></li>
+                
                 <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
                 <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
                 <li><a href="#settings" id="link-settings">Ayarlar</a></li>
@@ -275,7 +260,6 @@
     </section>
 
     <div class="container">
-        <!-- YouTube Kanalı Kartı -->
         <section class="card">
             <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
@@ -285,9 +269,8 @@
             <a href="https://youtube.com/@taryelhuseynzade?si=gS3cNvQuY6zTR0ZL" target="_blank" class="btn-youtube" id="txt-yt-btn">Kanalı Ziyarət Et</a>
         </section>
 
-        <!-- YENİ: VİDEOLAR KARTI -->
-        <section class="card">
-            <!-- Play İkonu -->
+        <!-- VIDEOLAR KARTI (ID ƏLAVƏ EDİLDİ) -->
+        <section class="card" id="videos">
             <svg class="video-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
             </svg>
@@ -313,6 +296,7 @@
             
             const openSettingsLink = document.querySelector('a[href="#settings"]');
             const openAboutLink = document.querySelector('a[href="#about"]');
+            const openVideosLink = document.getElementById('link-videos');
             
             const settingsBackBtn = document.getElementById('settings-back-btn');
             const aboutBackBtn = document.getElementById('about-back-btn');
@@ -336,6 +320,13 @@
             });
             aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
 
+            // Videolar linkinə basdıqda menyunu bağla
+            if(openVideosLink) {
+                openVideosLink.addEventListener('click', () => {
+                    fullscreenMenu.classList.remove('active');
+                });
+            }
+
             specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
 
             const themeLightBtn = document.getElementById('theme-light');
@@ -352,25 +343,25 @@
                 az: {
                     brand: "Taryel Hüseynzadə", 
                     linkAbout: "Haqqında", linkLicense: "Açıq mənbə lisenziyası", linkHelp: "Kömək & Dəstək", linkSettings: "Ayarlar", 
+                    linkVideos: "Videolar",
                     settingsTitle: "Ayarlar", aboutTitle: "Haqqında", langTitle: "Dil (Language)", accessTitle: "Xüsusi İmkanlar", labelText: "Mətn Ölçüsü", labelAnim: "Animasiyalar", textNorm: "Normal", textLarge: "Böyük", animOn: "Aktiv", animOff: "Dayandır", themeTitle: "Tema", themeLight: "İşıqlı", themeDark: "Qaranlıq", themeSystem: "Sistem", colorTitle: "Rəng Palitrası", welcome: "Xoş Gəlmisiniz!", welcomeDesc: "Səhifəni aşağı sürüşdürərək kəşf edin", 
                     ytTitle: "YouTube Kanalım", ytDesc: "Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.", ytBtn: "Kanalı Ziyarət Et",
-                    // Yeni Videolar Kartı Tərcümələri
                     videosTitle: "Videolar", videosDesc: "Ən son videolarımı izləmək üçün klikləyin.", videosBtn: "İzlə"
                 },
                 en: {
                     brand: "Taryel Huseynzade", 
                     linkAbout: "About", linkLicense: "Open Source License", linkHelp: "Help & Support", linkSettings: "Settings", 
+                    linkVideos: "Videos",
                     settingsTitle: "Settings", aboutTitle: "About", langTitle: "Language", accessTitle: "Accessibility", labelText: "Text Size", labelAnim: "Animations", textNorm: "Normal", textLarge: "Large", animOn: "On", animOff: "Off", themeTitle: "Theme", themeLight: "Light", themeDark: "Dark", themeSystem: "System", colorTitle: "Color Palette", welcome: "Welcome!", welcomeDesc: "Scroll down to discover", 
                     ytTitle: "My YouTube Channel", ytDesc: "Subscribe to my channel to watch videos and stay updated.", ytBtn: "Visit Channel",
-                    // New Videos Card Translations
                     videosTitle: "Videos", videosDesc: "Click to watch my latest videos.", videosBtn: "Watch"
                 },
                 ru: {
                     brand: "Тариэль Гусейнзаде", 
                     linkAbout: "О нас", linkLicense: "Лицензия Open Source", linkHelp: "Помощь и поддержка", linkSettings: "Настройки", 
+                    linkVideos: "Видео",
                     settingsTitle: "Настройки", aboutTitle: "О нас", langTitle: "Язык (Language)", accessTitle: "Спец. возможности", labelText: "Размер текста", labelAnim: "Анимации", textNorm: "Норма", textLarge: "Крупный", animOn: "Вкл", animOff: "Выкл", themeTitle: "Тема", themeLight: "Светлая", themeDark: "Тёмная", themeSystem: "Системная", colorTitle: "Цветовая палитра", welcome: "Добро пожаловать!", welcomeDesc: "Прокрутите вниз, чтобы узнать больше", 
                     ytTitle: "Мой YouTube канал", ytDesc: "Подпишитесь на мой канал, чтобы смотреть видео и быть в курсе новостей.", ytBtn: "Посетить канал",
-                    // New Videos Card Translations
                     videosTitle: "Видео", videosDesc: "Нажмите, чтобы посмотреть мои последние видео.", videosBtn: "Смотреть"
                 }
             };
@@ -383,6 +374,7 @@
                 document.getElementById('link-license').textContent = t.linkLicense;
                 document.getElementById('link-help').textContent = t.linkHelp;
                 document.getElementById('link-settings').textContent = t.linkSettings;
+                document.getElementById('link-videos').textContent = t.linkVideos; // Yeni link tərcüməsi
                 document.getElementById('txt-settings-title').textContent = t.settingsTitle;
                 document.getElementById('txt-about-title').textContent = t.aboutTitle;
                 document.getElementById('txt-lang-title').textContent = t.langTitle;
@@ -403,8 +395,6 @@
                 document.getElementById('txt-yt-title').textContent = t.ytTitle;
                 document.getElementById('txt-yt-desc').textContent = t.ytDesc;
                 document.getElementById('txt-yt-btn').textContent = t.ytBtn;
-                
-                // Videolar kartı tərcüməsi
                 document.getElementById('txt-videos-title').textContent = t.videosTitle;
                 document.getElementById('txt-videos-desc').textContent = t.videosDesc;
                 document.getElementById('txt-videos-btn').textContent = t.videosBtn;
