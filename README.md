@@ -5,4 +5,4 @@ taryelhuseynzade.github.io
 
 Əgər sualınız və ya probleminiz varsa taryelibo699@gmail.com ilə əlaqə saxlaya bilərsiniz.
 
-Vebsayt hər gün yenilənir.
+Vebsayt mümkün olduqda hər gün yenilənir.
