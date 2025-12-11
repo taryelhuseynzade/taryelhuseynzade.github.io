@@ -44,7 +44,7 @@
 
         /* --- HEADER --- */
         header {
-            background: var(--header-bg-scrolled); /* Hər zaman görünən olsun deyə rəng verildi */
+            background: var(--header-bg-scrolled); 
             color: var(--header-text); padding: 15px 5%;
             position: fixed; top: 0; width: 90%; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
@@ -91,22 +91,10 @@
             #fullscreen-menu a { font-size: 1rem; color: var(--header-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         }
 
-        /* --- VIEWS (TAB MƏZMUNLARI) --- */
-        .tab-view {
-            display: none; /* Varsayılan olaraq gizli */
-            padding-top: 80px; /* Header hündürlüyü */
-            min-height: 100vh;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .tab-view.active {
-            display: block; /* Aktiv olanda görünür */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- VIEWS --- */
+        .tab-view { display: none; padding-top: 80px; min-height: 100vh; animation: fadeIn 0.3s ease; }
+        .tab-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         #banner { height: 60vh; margin-top: -80px; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: #fff; }
         .banner-text h2 { font-size: 3rem; }
@@ -114,24 +102,11 @@
 
         .container { width: 90%; max-width: 800px; margin: auto; overflow: hidden; padding: 20px 0; }
         
-        /* Section Header Styles */
-        .view-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 2px 10px var(--shadow);
-        }
+        .view-header { text-align: center; margin-bottom: 30px; padding: 20px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 2px 10px var(--shadow); }
         .view-header h2 { margin: 0; color: var(--primary-color); }
 
-        /* --- ACTIVITY PANELS (Ayarlar & Haqqında) --- */
-        .activity-panel {
-            position: fixed; top: 0; right: 0; width: 100%; height: 100%;
-            background-color: var(--panel-bg); color: var(--text-color); z-index: 3000;
-            transform: translateX(100%); transition: transform 0.4s ease-in-out;
-            display: flex; flex-direction: column;
-        }
+        /* --- ACTIVITY PANELS --- */
+        .activity-panel { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background-color: var(--panel-bg); color: var(--text-color); z-index: 3000; transform: translateX(100%); transition: transform 0.4s ease-in-out; display: flex; flex-direction: column; }
         .activity-panel.active { transform: translateX(0); }
         .panel-header { display: flex; align-items: center; padding: 15px 5%; background-color: #333; color: #fff; }
         .panel-back-btn { background: none; border: none; cursor: pointer; margin-right: 20px; padding: 0; display: flex; align-items: center; }
@@ -147,22 +122,122 @@
         }
 
         /* --- AŞAĞI TAB MENYU --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height);
-            background-color: var(--card-bg); box-shadow: 0 -2px 10px var(--shadow);
-            display: flex; justify-content: space-around; align-items: center; z-index: 2500;
-            border-top: 1px solid rgba(0,0,0,0.05);
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-decoration: none; color: var(--text-color); font-size: 0.75rem; flex-grow: 1; height: 100%; cursor: pointer; transition: color 0.3s ease;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height); background-color: var(--card-bg); box-shadow: 0 -2px 10px var(--shadow); display: flex; justify-content: space-around; align-items: center; z-index: 2500; border-top: 1px solid rgba(0,0,0,0.05); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-color); font-size: 0.75rem; flex-grow: 1; height: 100%; cursor: pointer; transition: color 0.3s ease; }
         .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; }
         .nav-item:hover { color: var(--primary-color); opacity: 0.8; }
         .nav-item:hover svg { transform: translateY(-2px); }
         .nav-item.active { color: var(--primary-color); font-weight: bold; }
 
-        /* --- ELEMENTLƏR --- */
+        /* --- SİYAHI (LIST) TİPLİ VİDEO DİZAYNI --- */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .video-item {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .video-item:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .video-item-content {
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .video-thumb {
+            position: relative;
+            width: 140px;
+            height: 80px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 2px 4px;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Play ikonu overlay */
+        .play-icon-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px; height: 30px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .play-icon-overlay svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
+
+        .video-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-grow: 1;
+        }
+
+        .video-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            line-height: 1.3;
+            color: var(--text-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-top: auto;
+        }
+        
+        .watch-text {
+            display: block;
+            margin-top: 5px;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        @media (min-width: 768px) {
+            .video-item-content { flex-direction: row; }
+            .video-thumb { width: 40%; height: auto; min-height: 180px; }
+            .video-info { width: 60%; }
+        }
+
+        /* Digər CSS-lər... */
         .settings-section { margin-bottom: 30px; text-align: left; }
         .settings-section h3 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
         .setting-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; }
@@ -184,7 +259,6 @@
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow); text-align: center; max-width: 600px; margin: 0 auto 30px auto; transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
         .youtube-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
-        .video-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
         .article-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
         .card h3 { margin: 10px 0; font-size: 1.5rem; }
         .card p { color: var(--text-color); margin-bottom: 25px; opacity: 0.8; }
@@ -202,6 +276,8 @@
             <button id="menu-close">&times;</button>
             <ul>
                 <li><a href="#about" id="link-about">Haqqında</a></li>
+                <li><a href="#videos" id="link-videos">Videolar</a></li>
+                <li><a href="#articles" id="link-articles">Məqalələr</a></li>
                 <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
                 <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
                 <li><a href="#settings" id="link-settings">Ayarlar</a></li>
@@ -287,7 +363,7 @@
         </div>
     </aside>
 
-    <!-- ==== TAB VIEWS (ƏSAS MƏZMUN HİSSƏLƏRİ) ==== -->
+    <!-- ==== TAB VIEWS ==== -->
 
     <!-- 1. EV TABI -->
     <div id="view-home" class="tab-view active">
@@ -299,7 +375,6 @@
         </section>
 
         <div class="container">
-            <!-- YouTube Kartı -->
             <section class="card">
                 <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
@@ -311,28 +386,60 @@
         </div>
     </div>
 
-    <!-- 2. VİDEOLAR TABI (AYRI EKRAN) -->
+    <!-- 2. VİDEOLAR TABI (YENİLƏNDİ) -->
     <div id="view-videos" class="tab-view">
         <div class="container">
             <div class="view-header">
                 <h2 id="txt-videos-view-title">Videolar Bölməsi</h2>
             </div>
             
-            <section class="card">
-                <svg class="video-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-                </svg>
-                <h3 id="txt-videos-title">Son Videolar</h3>
-                <p id="txt-videos-desc">Ən son videolarımı izləmək üçün klikləyin.</p>
-                <a href="https://www.youtube.com/@taryelhuseynzade/videos" target="_blank" class="btn-primary" id="txt-videos-btn">İzlə</a>
-            </section>
-            
-            <!-- Burada gələcəkdə video siyahısı ola bilər -->
-            <p style="text-align:center; color:#999; margin-top:20px;">Daha çox video tezliklə...</p>
+            <div class="video-list">
+                
+                <!-- Video 1 (Köhnə video) -->
+                <a href="https://youtu.be/PP5BympxEUQ?si=BOMsmEMz3twGHnpJ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb">
+                            <img src="https://i.ytimg.com/vi_webp/PP5BympxEUQ/mqdefault.webp" alt="Video">
+                            <div class="play-icon-overlay">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <span class="video-duration">4:20</span>
+                        </div>
+                        <div class="video-info">
+                            <h3 id="txt-video-1-title">Taryel Hüseynzadə - Video 1</h3>
+                            <div class="video-meta">
+                                <span>2 gün əvvəl</span> &bull; <span>1.5K baxış</span>
+                            </div>
+                            <span class="watch-text" id="txt-watch-1">İzlə &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Video 2 (YENİ ƏLAVƏ EDİLDİ) -->
+                <a href="https://youtu.be/9kLzT0T1mxM?si=3Sqmiihw-33CEMhZ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb">
+                            <img src="https://i.ytimg.com/vi/9kLzT0T1mxM/mqdefault.jpg?sqp=-oaymwEmCMACELQB8quKqQMa8AEB-AHOBYACgAqKAgwIABABGGUgVChGMA8=&rs=AOn4CLBel09-_L2np6GrrPPX7Se3zL8bCA" alt="Video Thumbnail">
+                            <div class="play-icon-overlay">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <span class="video-duration">10:00</span>
+                        </div>
+                        <div class="video-info">
+                            <h3 id="txt-video-2-title">Yeni Video Başlığı</h3>
+                            <div class="video-meta">
+                                <span>Yeni</span> &bull; <span>Baxış yoxdur</span>
+                            </div>
+                            <span class="watch-text" id="txt-watch-2">İzlə &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
         </div>
     </div>
 
-    <!-- 3. MƏQALƏLƏR TABI (AYRI EKRAN) -->
+    <!-- 3. MƏQALƏLƏR TABI -->
     <div id="view-articles" class="tab-view">
         <div class="container">
             <div class="view-header">
@@ -348,12 +455,11 @@
                 <a href="#" class="btn-primary" id="txt-articles-btn">Oxu</a>
             </section>
             
-             <!-- Burada gələcəkdə məqalə siyahısı ola bilər -->
              <p style="text-align:center; color:#999; margin-top:20px;">Yeni məqalələr tezliklə...</p>
         </div>
     </div>
     
-    <!-- YENİ AŞAĞI TAB MENYU -->
+    <!-- AŞAĞI TAB MENYU -->
     <nav class="bottom-nav">
         <div class="nav-item active" data-target="home">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -383,16 +489,17 @@
             
             const openSettingsLink = document.querySelector('a[href="#settings"]');
             const openAboutLink = document.querySelector('a[href="#about"]');
+            const openVideosLink = document.getElementById('link-videos');
+            const openArticlesLink = document.getElementById('link-articles');
             
             const settingsBackBtn = document.getElementById('settings-back-btn');
             const aboutBackBtn = document.getElementById('about-back-btn');
             const specialFeaturesBtn = document.getElementById('special-features-btn');
 
-            // Bottom Nav Elementləri
             const tabItems = document.querySelectorAll('.nav-item');
             const tabViews = document.querySelectorAll('.tab-view');
 
-            // Menu idarəetməsi
+            window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
             menuToggle.addEventListener('click', () => fullscreenMenu.classList.add('active'));
             menuClose.addEventListener('click', () => fullscreenMenu.classList.remove('active'));
             
@@ -410,27 +517,35 @@
             });
             aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
 
+            if(openVideosLink) {
+                openVideosLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fullscreenMenu.classList.remove('active');
+                    document.querySelector('.nav-item[data-target="videos"]').click();
+                });
+            }
+            if(openArticlesLink) {
+                openArticlesLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fullscreenMenu.classList.remove('active');
+                    document.querySelector('.nav-item[data-target="articles"]').click();
+                });
+            }
+
             specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
 
-            // --- TAB KEÇİD FUNKSİYASI (YENİ) ---
+            // TAB FUNKSİONALLIĞI
             tabItems.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const target = this.getAttribute('data-target');
-
-                    // 1. Aktiv Tab düyməsini dəyiş
                     tabItems.forEach(item => item.classList.remove('active'));
                     this.classList.add('active');
-
-                    // 2. Aktiv Görüntünü (View) dəyiş
                     tabViews.forEach(view => view.classList.remove('active'));
                     document.getElementById('view-' + target).classList.add('active');
-
-                    // 3. Səhifəni yuxarı qaytar
                     window.scrollTo(0, 0);
                 });
             });
 
-            // (Ayarlar və Tərcümə Funksiyaları)
             const themeLightBtn = document.getElementById('theme-light');
             const themeDarkBtn = document.getElementById('theme-dark');
             const themeSystemBtn = document.getElementById('theme-system');
@@ -445,45 +560,49 @@
                 az: {
                     brand: "Taryel Hüseynzadə", 
                     linkAbout: "Haqqında", linkLicense: "Açıq mənbə lisenziyası", linkHelp: "Kömək & Dəstək", linkSettings: "Ayarlar", 
+                    linkVideos: "Videolar", linkArticles: "Məqalələr",
                     settingsTitle: "Ayarlar", aboutTitle: "Haqqında", langTitle: "Dil (Language)", accessTitle: "Xüsusi İmkanlar", labelText: "Mətn Ölçüsü", labelAnim: "Animasiyalar", textNorm: "Normal", textLarge: "Böyük", animOn: "Aktiv", animOff: "Dayandır", themeTitle: "Tema", themeLight: "İşıqlı", themeDark: "Qaranlıq", themeSystem: "Sistem", colorTitle: "Rəng Palitrası", welcome: "Xoş Gəlmisiniz!", welcomeDesc: "Səhifəni aşağı sürüşdürərək kəşf edin", 
                     ytTitle: "YouTube Kanalım", ytDesc: "Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.", ytBtn: "Kanalı Ziyarət Et",
-                    // Yeni Tərcümələr
                     videosViewTitle: "Videolar Bölməsi", articlesViewTitle: "Məqalələr Bölməsi",
-                    videosTitle: "Son Videolar", videosDesc: "Ən son videolarımı izləmək üçün klikləyin.", videosBtn: "İzlə",
                     articlesTitle: "Məqalələr", articlesDesc: "Texnologiya və proqramlaşdırma haqqında yazılarım.", articlesBtn: "Oxu",
-                    tabHome: "Ev", tabVideos: "Videolar", tabArticles: "Məqalələr"
+                    tabHome: "Ev", tabVideos: "Videolar", tabArticles: "Məqalələr",
+                    watchText: "İzlə"
                 },
                 en: {
                     brand: "Taryel Huseynzade", 
                     linkAbout: "About", linkLicense: "Open Source License", linkHelp: "Help & Support", linkSettings: "Settings", 
+                    linkVideos: "Videos", linkArticles: "Articles",
                     settingsTitle: "Settings", aboutTitle: "About", langTitle: "Language", accessTitle: "Accessibility", labelText: "Text Size", labelAnim: "Animations", textNorm: "Normal", textLarge: "Large", animOn: "On", animOff: "Off", themeTitle: "Theme", themeLight: "Light", themeDark: "Dark", themeSystem: "System", colorTitle: "Color Palette", welcome: "Welcome!", welcomeDesc: "Scroll down to discover", 
                     ytTitle: "My YouTube Channel", ytDesc: "Subscribe to my channel to watch videos and stay updated.", ytBtn: "Visit Channel",
                     videosViewTitle: "Videos Section", articlesViewTitle: "Articles Section",
-                    videosTitle: "Latest Videos", videosDesc: "Click to watch my latest videos.", videosBtn: "Watch",
                     articlesTitle: "Articles", articlesDesc: "My writings about technology and programming.", articlesBtn: "Read",
-                    tabHome: "Home", tabVideos: "Videos", tabArticles: "Articles"
+                    tabHome: "Home", tabVideos: "Videos", tabArticles: "Articles",
+                    watchText: "Watch"
                 },
                 ru: {
                     brand: "Тариэль Гусейнзаде", 
                     linkAbout: "О нас", linkLicense: "Лицензия Open Source", linkHelp: "Помощь и поддержка", linkSettings: "Настройки", 
+                    linkVideos: "Видео", linkArticles: "Статьи",
                     settingsTitle: "Настройки", aboutTitle: "О нас", langTitle: "Язык (Language)", accessTitle: "Спец. возможности", labelText: "Размер текста", labelAnim: "Анимации", textNorm: "Норма", textLarge: "Крупный", animOn: "Вкл", animOff: "Выкл", themeTitle: "Тема", themeLight: "Светлая", themeDark: "Тёмная", themeSystem: "Системная", colorTitle: "Цветовая палитра", welcome: "Добро пожаловать!", welcomeDesc: "Прокрутите вниз, чтобы узнать больше", 
                     ytTitle: "Мой YouTube канал", ytDesc: "Подпишитесь на мой канал, чтобы смотреть видео и быть в курсе новостей.", ytBtn: "Посетить канал",
                     videosViewTitle: "Раздел Видео", articlesViewTitle: "Раздел Статьи",
-                    videosTitle: "Последние Видео", videosDesc: "Нажмите, чтобы посмотреть мои последние видео.", videosBtn: "Смотреть",
                     articlesTitle: "Статьи", articlesDesc: "Мои статьи о технологиях и программировании.", articlesBtn: "Читать",
-                    tabHome: "Главная", tabVideos: "Видео", tabArticles: "Статьи"
+                    tabHome: "Главная", tabVideos: "Видео", tabArticles: "Статьи",
+                    watchText: "Смотреть"
                 }
             };
 
             function applyLanguage(lang) {
                 langBtns.forEach(btn => { btn.classList.remove('active'); if(btn.dataset.lang === lang) btn.classList.add('active'); });
                 const t = translations[lang];
-                // Mövcud ID-lər
                 document.getElementById('txt-brand').textContent = t.brand;
                 document.getElementById('link-about').textContent = t.linkAbout;
                 document.getElementById('link-license').textContent = t.linkLicense;
                 document.getElementById('link-help').textContent = t.linkHelp;
                 document.getElementById('link-settings').textContent = t.linkSettings;
+                document.getElementById('link-videos').textContent = t.linkVideos; 
+                document.getElementById('link-articles').textContent = t.linkArticles; 
+                
                 document.getElementById('txt-settings-title').textContent = t.settingsTitle;
                 document.getElementById('txt-about-title').textContent = t.aboutTitle;
                 document.getElementById('txt-lang-title').textContent = t.langTitle;
@@ -505,28 +624,27 @@
                 document.getElementById('txt-yt-desc').textContent = t.ytDesc;
                 document.getElementById('txt-yt-btn').textContent = t.ytBtn;
                 
-                // Yeni ID-lər (View Headers & Cards)
                 document.getElementById('txt-videos-view-title').textContent = t.videosViewTitle;
                 document.getElementById('txt-articles-view-title').textContent = t.articlesViewTitle;
-                
-                document.getElementById('txt-videos-title').textContent = t.videosTitle;
-                document.getElementById('txt-videos-desc').textContent = t.videosDesc;
-                document.getElementById('txt-videos-btn').textContent = t.videosBtn;
                 
                 document.getElementById('txt-articles-title').textContent = t.articlesTitle;
                 document.getElementById('txt-articles-desc').textContent = t.articlesDesc;
                 document.getElementById('txt-articles-btn').textContent = t.articlesBtn;
 
-                // Tablar
                 document.getElementById('txt-tab-home').textContent = t.tabHome;
                 document.getElementById('txt-tab-videos').textContent = t.tabVideos;
                 document.getElementById('txt-tab-articles').textContent = t.tabArticles;
+                
+                // Video Siyahısındakı Düymələri Tərcümə Et
+                const watchBtn1 = document.getElementById('txt-watch-1');
+                if(watchBtn1) watchBtn1.innerHTML = t.watchText + ' &rarr;';
+                const watchBtn2 = document.getElementById('txt-watch-2');
+                if(watchBtn2) watchBtn2.innerHTML = t.watchText + ' &rarr;';
 
                 localStorage.setItem('lang', lang);
             }
             langBtns.forEach(btn => btn.addEventListener('click', () => applyLanguage(btn.dataset.lang)));
 
-            // (Digər funksiyalar: setTextSize, setAnimation, applyTheme, applyColor olduğu kimi qalır)
             function setTextSize(size) { if(size==='large'){document.documentElement.classList.add('large-text'); textLargeBtn.classList.add('active'); textNormalBtn.classList.remove('active');}else{document.documentElement.classList.remove('large-text'); textNormalBtn.classList.add('active'); textLargeBtn.classList.remove('active');} localStorage.setItem('textSize', size); }
             function setAnimation(state) { if(state==='off'){document.documentElement.classList.add('no-anim'); animOffBtn.classList.add('active'); animOnBtn.classList.remove('active');}else{document.documentElement.classList.remove('no-anim'); animOnBtn.classList.add('active'); animOffBtn.classList.remove('active');} localStorage.setItem('animation', state); }
             textNormalBtn.addEventListener('click', () => setTextSize('normal')); textLargeBtn.addEventListener('click', () => setTextSize('large')); animOnBtn.addEventListener('click', () => setAnimation('on')); animOffBtn.addEventListener('click', () => setAnimation('off'));
@@ -535,7 +653,6 @@
             function applyColor(c){document.documentElement.style.setProperty('--primary-color',c);localStorage.setItem('primaryColor',c);colorBtns.forEach(b=>{b.classList.remove('active');if(b.getAttribute('data-color')===c)b.classList.add('active');});}
             colorBtns.forEach(b=>b.addEventListener('click',()=>applyColor(b.getAttribute('data-color'))));
 
-            // Başlanğıc Yükləmə
             applyTheme(localStorage.getItem('theme') || 'system');
             applyColor(localStorage.getItem('primaryColor') || '#007bff');
             applyLanguage(localStorage.getItem('lang') || 'az');
