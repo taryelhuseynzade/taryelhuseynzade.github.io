@@ -16,7 +16,8 @@
             --header-text: #fff;
             --shadow: rgba(0,0,0,0.1);
             --base-size: 16px;
-            --bottom-nav-height: 60px;
+            --bottom-nav-height: 70px; /* Hündürlük artırıldı */
+            --sidebar-width-collapsed: 90px; 
         }
 
         body.dark-theme {
@@ -39,19 +40,22 @@
             background-color: var(--bg-color); color: var(--text-color);
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
-            padding-bottom: calc(var(--bottom-nav-height) + 20px);
+            padding-bottom: 100px; /* Aşağıda üzən tab üçün boşluq */
         }
 
         /* --- HEADER --- */
         header {
             background: var(--header-bg-scrolled); 
-            color: var(--header-text); padding: 15px 5%;
+            color: var(--header-text); 
+            padding: 15px 5%;
             position: fixed; top: 0; width: 90%; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
             transition: padding 0.4s ease;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        header h1 { margin: 0; font-size: 1.5rem; color: inherit; }
+        header h1 { margin: 0; font-size: 1.5rem; color: inherit; text-align: left; }
 
         .header-controls { display: flex; align-items: center; gap: 20px; }
         
@@ -76,19 +80,23 @@
         #fullscreen-menu a:hover { color: var(--primary-color); }
         #menu-close { position: absolute; top: 30px; right: 5%; background: none; border: none; color: white; font-size: 40px; cursor: pointer; }
 
+        /* --- DESKTOP DÜZƏLİŞLƏRİ --- */
         @media (min-width: 768px) {
-            #menu-toggle, #menu-close { display: none !important; }
-            header { flex-direction: column; justify-content: center; padding-top: 10px; padding-bottom: 10px; }
-            #branding { margin-bottom: 5px; }
-            .header-controls { position: absolute; right: 5%; top: 20px; }
-            #fullscreen-menu {
-                position: static; width: 100%; height: auto; background-color: transparent;
-                display: flex; flex-direction: row; justify-content: center;
-                opacity: 1; visibility: visible; z-index: auto; transform: none;
+            body { padding-bottom: 0; padding-left: 120px; /* Sol tərəfdəki glass menyu üçün yer */ }
+            header { 
+                width: calc(100% - 120px - 10%); /* Padding nəzərə alınır */
+                left: 120px; 
+                padding: 15px 5%;
             }
-            #fullscreen-menu ul { display: flex; flex-direction: row; gap: 40px; padding: 0; }
-            #fullscreen-menu li { margin: 0; }
-            #fullscreen-menu a { font-size: 1rem; color: var(--header-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+            #menu-toggle { display: flex; }
+            #menu-close { display: block; }
+            #fullscreen-menu {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background-color: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+            }
+            #fullscreen-menu ul { flex-direction: column; gap: 0; }
+            #fullscreen-menu a { font-size: 2rem; }
         }
 
         /* --- VIEWS --- */
@@ -116,128 +124,120 @@
         .panel-content { padding: 20px 5%; flex-grow: 1; overflow-y: auto; }
 
         @media (min-width: 768px) { 
-            #settings-panel { width: 100%; top: 90px; height: calc(100% - 90px); box-shadow: none; z-index: 900; }
-            #settings-panel .panel-content { max-width: 800px; margin: 0 auto; }
-            #about-panel { width: 400px; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 3000; top: 0; height: 100%; }
+            #settings-panel, #about-panel { 
+                width: calc(100% - 120px); 
+                left: 120px; 
+                top: 90px; 
+                height: calc(100% - 90px); 
+                box-shadow: none; 
+                z-index: 900; 
+            }
+            .panel-content { max-width: 800px; margin: 0 auto; }
         }
 
-        /* --- AŞAĞI TAB MENYU --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height); background-color: var(--card-bg); box-shadow: 0 -2px 10px var(--shadow); display: flex; justify-content: space-around; align-items: center; z-index: 2500; border-top: 1px solid rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-color); font-size: 0.75rem; flex-grow: 1; height: 100%; cursor: pointer; transition: color 0.3s ease; }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; }
-        .nav-item:hover { color: var(--primary-color); opacity: 0.8; }
-        .nav-item:hover svg { transform: translateY(-2px); }
-        .nav-item.active { color: var(--primary-color); font-weight: bold; }
-
-        /* --- SİYAHI (LIST) TİPLİ VİDEO DİZAYNI --- */
-        .video-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* --- LIQUID GLASS TAB MENYU (YENİLƏNDİ) --- */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 20px; /* Aşağıdan üzən məsafə */
+            left: 5%; /* Mərkəzləşdirmək üçün */
+            width: 90%; 
+            height: var(--bottom-nav-height); 
+            
+            /* Glassmorphism Effekti */
+            background: rgba(255, 255, 255, 0.2); /* İşıqlı rejimdə yarımşəffaf ağ */
+            backdrop-filter: blur(15px); /* Bulanıqlıq */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* İncə şüşə çərçivə */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); /* Yumşaq kölgə */
+            border-radius: 20px; /* Yumru künclər */
+            
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            z-index: 2500; 
+            transition: all 0.3s ease;
         }
 
-        .video-item {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px var(--shadow);
-            transition: background-color 0.3s ease;
-        }
-
-        .video-item:hover {
-            background-color: rgba(0,0,0,0.03);
-        }
-
-        .video-item-content {
-            display: flex;
-            flex-direction: row;
-            padding: 10px;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .video-thumb {
-            position: relative;
-            width: 140px;
-            height: 80px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .video-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-duration {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 2px 4px;
-            font-size: 0.7rem;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        /* Play ikonu overlay */
-        .play-icon-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30px; height: 30px;
-            background: rgba(0,0,0,0.6);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .play-icon-overlay svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
-
-        .video-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex-grow: 1;
-        }
-
-        .video-info h3 {
-            margin: 0 0 5px 0;
-            font-size: 1rem;
-            line-height: 1.3;
-            color: var(--text-color);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .video-meta {
-            font-size: 0.8rem;
-            color: var(--text-color);
-            opacity: 0.7;
-            margin-top: auto;
+        /* Qaranlıq rejimdə Glass effekti */
+        body.dark-theme .bottom-nav {
+            background: rgba(30, 30, 30, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
         
-        .watch-text {
-            display: block;
-            margin-top: 5px;
-            color: var(--primary-color);
-            font-weight: bold;
-            font-size: 0.85rem;
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-decoration: none; 
+            color: var(--text-color); 
+            font-size: 0.75rem; 
+            flex-grow: 1; 
+            height: 100%; 
+            cursor: pointer; 
+            transition: color 0.3s ease, transform 0.2s ease; 
+            position: relative;
+        }
+        
+        .nav-item svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
+        .nav-item:hover { color: var(--primary-color); opacity: 1; transform: translateY(-3px); }
+        .nav-item.active { color: var(--primary-color); font-weight: bold; }
+        
+        /* Aktiv tabın altına parıltı effekti */
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            width: 5px;
+            height: 5px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-color);
         }
 
+        /* --- DESKTOP GLASS SIDEBAR --- */
+        @media (min-width: 768px) {
+            .bottom-nav {
+                top: 50%; /* Ekranın ortasında */
+                transform: translateY(-50%);
+                bottom: auto; 
+                left: 20px; 
+                width: 80px; 
+                height: auto; /* Məzmuna görə hündürlük */
+                padding: 30px 0;
+                flex-direction: column; 
+                justify-content: center;
+                gap: 20px;
+                border-radius: 20px; /* Tam oval deyil, künclü oval */
+            }
+            .nav-item { flex-grow: 0; height: 70px; width: 100%; font-size: 0.7rem; }
+            .nav-item svg { width: 30px; height: 30px; margin-bottom: 5px; }
+            .nav-item.active::after { bottom: auto; right: 5px; top: 50%; transform: translateY(-50%); }
+        }
+
+        /* --- VIDEO SİYAHISI --- */
+        .video-list { display: flex; flex-direction: column; gap: 15px; }
+        .video-item { display: block; text-decoration: none; color: inherit; background: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px var(--shadow); transition: background-color 0.3s ease; }
+        .video-item:hover { background-color: rgba(0,0,0,0.03); }
+        .video-item-content { display: flex; flex-direction: row; padding: 10px; gap: 12px; align-items: flex-start; }
+        .video-thumb { position: relative; width: 140px; height: 80px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+        .video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .video-duration { position: absolute; bottom: 4px; right: 4px; background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 2px 4px; font-size: 0.7rem; border-radius: 4px; font-weight: bold; }
+        .play-icon-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .play-icon-overlay svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
+        .video-info { display: flex; flex-direction: column; justify-content: flex-start; flex-grow: 1; }
+        .video-info h3 { margin: 0 0 5px 0; font-size: 1rem; line-height: 1.3; color: var(--text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-meta { font-size: 0.8rem; color: var(--text-color); opacity: 0.7; margin-top: auto; }
+        .watch-text { display: block; margin-top: 5px; color: var(--primary-color); font-weight: bold; font-size: 0.85rem; }
+        
         @media (min-width: 768px) {
             .video-item-content { flex-direction: row; }
-            .video-thumb { width: 40%; height: auto; min-height: 180px; }
-            .video-info { width: 60%; }
+            .video-thumb { width: 200px; height: 112px; }
+            .video-info { width: auto; }
         }
 
-        /* Digər CSS-lər... */
+        /* Elementlər */
         .settings-section { margin-bottom: 30px; text-align: left; }
         .settings-section h3 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
         .setting-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; }
@@ -248,18 +248,15 @@
         .color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; }
         .color-btn:hover { transform: scale(1.1); }
         .color-btn.active { border-color: var(--text-color); transform: scale(1.1); }
-
         .profile-header { margin-bottom: 30px; text-align: center; }
         .profile-header img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #f4f4f4; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .profile-header h2 { margin-top: 15px; margin-bottom: 0; font-size: 1.8rem; color: var(--text-color); }
         .github-btn { display: inline-flex; align-items: center; gap: 10px; background-color: #24292e; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; transition: background-color 0.3s ease, transform 0.3s ease; }
         .github-btn:hover { background-color: #444; transform: translateY(-2px); }
         .github-btn svg { fill: #fff; width: 20px; height: 20px; }
-
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow); text-align: center; max-width: 600px; margin: 0 auto 30px auto; transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .youtube-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
-        .article-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
+        .youtube-icon, .video-icon, .article-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
         .card h3 { margin: 10px 0; font-size: 1.5rem; }
         .card p { color: var(--text-color); margin-bottom: 25px; opacity: 0.8; }
         .btn-youtube { display: inline-block; background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 200% 100%; color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: all 0.4s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
@@ -386,7 +383,7 @@
         </div>
     </div>
 
-    <!-- 2. VİDEOLAR TABI (YENİLƏNDİ) -->
+    <!-- 2. VİDEOLAR TABI -->
     <div id="view-videos" class="tab-view">
         <div class="container">
             <div class="view-header">
@@ -394,8 +391,7 @@
             </div>
             
             <div class="video-list">
-                
-                <!-- Video 1 (Köhnə video) -->
+                <!-- Video 1 -->
                 <a href="https://youtu.be/PP5BympxEUQ?si=BOMsmEMz3twGHnpJ" target="_blank" class="video-item">
                     <div class="video-item-content">
                         <div class="video-thumb">
@@ -406,16 +402,16 @@
                             <span class="video-duration">4:20</span>
                         </div>
                         <div class="video-info">
-                            <h3 id="txt-video-1-title">Taryel Hüseynzadə - Video 1</h3>
+                            <h3 id="txt-video-1-title">Paketlənmiş məhsulların zərərləri</h3>
                             <div class="video-meta">
-                                <span>2 gün əvvəl</span> &bull; <span>1.5K baxış</span>
+                                <span id="txt-video-1-date">2 aprel 2023</span>
                             </div>
                             <span class="watch-text" id="txt-watch-1">İzlə &rarr;</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Video 2 (YENİ ƏLAVƏ EDİLDİ) -->
+                <!-- Video 2 -->
                 <a href="https://youtu.be/9kLzT0T1mxM?si=3Sqmiihw-33CEMhZ" target="_blank" class="video-item">
                     <div class="video-item-content">
                         <div class="video-thumb">
@@ -423,18 +419,17 @@
                             <div class="play-icon-overlay">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
-                            <span class="video-duration">10:00</span>
+                            <span class="video-duration">1:03</span>
                         </div>
                         <div class="video-info">
-                            <h3 id="txt-video-2-title">Yeni Video Başlığı</h3>
+                            <h3 id="txt-video-2-title">Bayatı kürd muğamı</h3>
                             <div class="video-meta">
-                                <span>Yeni</span> &bull; <span>Baxış yoxdur</span>
+                                <span id="txt-video-2-date">12 aprel 2024</span>
                             </div>
                             <span class="watch-text" id="txt-watch-2">İzlə &rarr;</span>
                         </div>
                     </div>
                 </a>
-
             </div>
         </div>
     </div>
@@ -459,7 +454,7 @@
         </div>
     </div>
     
-    <!-- AŞAĞI TAB MENYU -->
+    <!-- LIQUID GLASS TAB MENYU -->
     <nav class="bottom-nav">
         <div class="nav-item active" data-target="home">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -534,7 +529,6 @@
 
             specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
 
-            // TAB FUNKSİONALLIĞI
             tabItems.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const target = this.getAttribute('data-target');
@@ -566,7 +560,9 @@
                     videosViewTitle: "Videolar Bölməsi", articlesViewTitle: "Məqalələr Bölməsi",
                     articlesTitle: "Məqalələr", articlesDesc: "Texnologiya və proqramlaşdırma haqqında yazılarım.", articlesBtn: "Oxu",
                     tabHome: "Ev", tabVideos: "Videolar", tabArticles: "Məqalələr",
-                    watchText: "İzlə"
+                    watchText: "İzlə",
+                    video1Title: "Paketlənmiş məhsulların zərərləri", video1Date: "2 aprel 2023",
+                    video2Title: "Bayatı kürd muğamı", video2Date: "12 aprel 2024"
                 },
                 en: {
                     brand: "Taryel Huseynzade", 
@@ -577,7 +573,9 @@
                     videosViewTitle: "Videos Section", articlesViewTitle: "Articles Section",
                     articlesTitle: "Articles", articlesDesc: "My writings about technology and programming.", articlesBtn: "Read",
                     tabHome: "Home", tabVideos: "Videos", tabArticles: "Articles",
-                    watchText: "Watch"
+                    watchText: "Watch",
+                    video1Title: "Harms of packaged products", video1Date: "April 2, 2023",
+                    video2Title: "Bayati Kurd Mugham", video2Date: "April 12, 2024"
                 },
                 ru: {
                     brand: "Тариэль Гусейнзаде", 
@@ -588,7 +586,9 @@
                     videosViewTitle: "Раздел Видео", articlesViewTitle: "Раздел Статьи",
                     articlesTitle: "Статьи", articlesDesc: "Мои статьи о технологиях и программировании.", articlesBtn: "Читать",
                     tabHome: "Главная", tabVideos: "Видео", tabArticles: "Статьи",
-                    watchText: "Смотреть"
+                    watchText: "Смотреть",
+                    video1Title: "Вред упакованных продуктов", video1Date: "2 апреля 2023",
+                    video2Title: "Мугам Баяты-Кюрд", video2Date: "12 апреля 2024"
                 }
             };
 
@@ -635,11 +635,13 @@
                 document.getElementById('txt-tab-videos').textContent = t.tabVideos;
                 document.getElementById('txt-tab-articles').textContent = t.tabArticles;
                 
-                // Video Siyahısındakı Düymələri Tərcümə Et
-                const watchBtn1 = document.getElementById('txt-watch-1');
-                if(watchBtn1) watchBtn1.innerHTML = t.watchText + ' &rarr;';
-                const watchBtn2 = document.getElementById('txt-watch-2');
-                if(watchBtn2) watchBtn2.innerHTML = t.watchText + ' &rarr;';
+                document.getElementById('txt-video-1-title').textContent = t.video1Title;
+                document.getElementById('txt-video-1-date').textContent = t.video1Date;
+                document.getElementById('txt-watch-1').innerHTML = t.watchText + ' &rarr;';
+                
+                document.getElementById('txt-video-2-title').textContent = t.video2Title;
+                document.getElementById('txt-video-2-date').textContent = t.video2Date;
+                document.getElementById('txt-watch-2').innerHTML = t.watchText + ' &rarr;';
 
                 localStorage.setItem('lang', lang);
             }
