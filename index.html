@@ -12,7 +12,7 @@
             --text-color: #333;
             --card-bg: #fff;
             --panel-bg: #fff;
-            --header-bg-scrolled: rgba(255, 255, 255, 0.8);
+            --header-bg-scrolled: rgba(255, 255, 255, 0.95);
             --header-text: #333;
             --shadow: rgba(0,0,0,0.1);
             --base-size: 16px;
@@ -28,7 +28,7 @@
             --text-color: #e0e0e0;
             --card-bg: #1e1e1e;
             --panel-bg: #1e1e1e;
-            --header-bg-scrolled: rgba(0, 0, 0, 0.8);
+            --header-bg-scrolled: rgba(0, 0, 0, 0.95);
             --header-text: #e0e0e0;
             --shadow: rgba(255,255,255,0.05);
 
@@ -61,12 +61,9 @@
         }
         
         header.scrolled {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
+            background: var(--header-bg-scrolled);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 10px 5%;
-            box-shadow: var(--shadow);
         }
         
         header h1 { margin: 0; font-size: 1.5rem; color: inherit; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -80,7 +77,7 @@
         #menu-toggle { background: none; border: none; cursor: pointer; padding: 0; display: flex; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; z-index: 2001; }
         #menu-toggle .line { width: 100%; height: 3px; background-color: var(--header-text); border-radius: 2px; }
         
-        /* --- MENYU --- */
+        /* --- MENYU (Overlay) --- */
         #fullscreen-menu {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.95); z-index: 2000;
@@ -94,29 +91,25 @@
         #fullscreen-menu a:hover { color: var(--primary-color); }
         #menu-close { position: absolute; top: 30px; right: 5%; background: none; border: none; color: white; font-size: 40px; cursor: pointer; }
 
+        /* --- DESKTOP REJİMİ DÜZƏLİŞLƏRİ --- */
         @media (min-width: 768px) {
             body { padding-bottom: 0; padding-left: 0; }
+            
             header { 
-                width: calc(100% - 140px); left: 120px; padding: 15px 2%;
-                flex-direction: column; justify-content: center;
-                background: transparent; backdrop-filter: none; border: none; box-shadow: none;
+                /* Başlıq tam ekran, elementlər kənarlarda */
+                width: 90%; 
+                left: 0;
+                padding: 15px 5%;
+                flex-direction: row; /* Yan-yana */
+                justify-content: space-between; /* Biri sola, biri sağa */
             }
+            
             header.scrolled {
-                background: var(--glass-bg); backdrop-filter: blur(10px);
-                border-radius: 0 0 20px 20px; border: 1px solid var(--glass-border); border-top: none;
-                width: calc(90% - 100px); left: 50%; transform: translateX(calc(-50% + 50px));
+                width: 90%;
             }
-            #menu-toggle, #menu-close { display: none !important; }
-            #branding { margin-bottom: 5px; }
-            .header-controls { position: absolute; right: 20px; top: 20px; }
-            #fullscreen-menu {
-                position: static; width: 100%; height: auto; background-color: transparent;
-                display: flex; flex-direction: row; justify-content: center;
-                opacity: 1; visibility: visible; z-index: auto; transform: none;
-            }
-            #fullscreen-menu ul { display: flex; flex-direction: row; gap: 40px; padding: 0; }
-            #fullscreen-menu li { margin: 0; }
-            #fullscreen-menu a { font-size: 1rem; color: var(--header-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+            /* Hamburger düyməsi Desktopda GÖRÜNÜR (Tələb 2) */
+            #menu-toggle { display: flex; }
         }
 
         /* --- VIEWS --- */
@@ -143,51 +136,49 @@
         .panel-content { padding: 20px 5%; flex-grow: 1; overflow-y: auto; }
 
         @media (min-width: 768px) { 
-            #settings-panel, #about-panel { width: 100%; top: 120px; height: calc(100% - 120px); box-shadow: none; z-index: 900; background: transparent; }
+            #settings-panel, #about-panel { width: 100%; top: 80px; height: calc(100% - 80px); box-shadow: none; z-index: 900; background: transparent; }
             .panel-content { max-width: 800px; margin: 0 auto; background: var(--card-bg); border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px var(--shadow); }
             .panel-header { display: none; }
         }
 
-        /* --- LIQUID GLASS TAB MENYU (Sürüşdürmə Animasiyası ilə) --- */
+        /* --- SÜRÜŞƏN TAB MENYU (SLIDING INDICATOR) --- */
         .bottom-nav { 
-            position: fixed; bottom: 20px; left: 5%; width: 90%; height: var(--bottom-nav-height); 
-            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); border-radius: 25px;
-            display: flex; justify-content: space-around; align-items: center; z-index: 2500; transition: all 0.3s ease;
-            position: fixed;
+            position: fixed; 
+            bottom: 20px; 
+            left: 5%; 
+            width: 90%; 
+            height: var(--bottom-nav-height); 
+            
+            /* Glass Style */
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 25px;
+            
+            display: flex; 
+            /* justify-content: space-around; -> Indicator üçün relative positioning lazımdır */
+            justify-content: center;
+            align-items: center; 
+            z-index: 2500; 
+            padding: 5px; /* Indicator padding */
         }
         
-        .nav-item { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; 
-            color: var(--text-color); font-size: 0.75rem; flex-grow: 1; height: 100%; cursor: pointer; 
-            transition: color 0.3s ease; 
-            position: relative; /* Z-index üçün */
-            z-index: 2;
-        }
-        
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; }
-        .nav-item:hover svg { transform: scale(1.1); }
-        
-        /* Aktiv elementin ikon/mətn rəngi */
-        .nav-item.active { color: #fff; }
-        .nav-item.active svg { fill: #fff; }
-
-        /* --- SÜRÜŞƏN GÖSTƏRİCİ (SLIDING INDICATOR) --- */
+        /* Sliding Indicator (Sürüşən Rəngli Fon) */
         .nav-indicator {
             position: absolute;
-            left: 0;
-            top: 5px; /* Yuxarıdan azca boşluq */
-            bottom: 5px;
+            top: 5px;
+            left: 5px;
             height: calc(100% - 10px);
-            width: 0; /* JS ilə təyin olunacaq */
-            background-color: var(--primary-color);
+            background-color: var(--primary-color); /* Varsayılan rəng */
             border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Səlis hərəkət */
-            z-index: 1; /* Mətnin arxasında */
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Sürüşmə animasiyası */
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Göy Qurşağı Animasiyası (Göstərici üçün) */
+        /* Göy Qurşağı Modu üçün Indicator */
         @keyframes rainbow-bg {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -199,21 +190,39 @@
             background-size: 400% 400%; 
             animation: rainbow-bg 6s ease infinite;
         }
+        
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-decoration: none; 
+            color: var(--text-color); 
+            font-size: 0.75rem; 
+            flex: 1; /* Bərabər paylansın */
+            height: 100%; 
+            cursor: pointer; 
+            z-index: 2; /* Indicatorun üstündə olsun */
+            transition: color 0.3s ease; 
+            border-radius: 20px;
+        }
+        
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; }
+        
+        /* Aktiv olanda mətn və ikon ağ olsun */
+        .nav-item.active { color: #fff; }
+        .nav-item.active svg { fill: #fff; }
 
+        .nav-item:hover { color: var(--primary-color); }
+        .nav-item.active:hover { color: #fff; } /* Aktivdirsə hoverdə də ağ qalsın */
+
+
+        /* Desktop Tab Düzəlişləri (Sol tərəf yox, aşağı mərkəz) */
         @media (min-width: 768px) {
-            .bottom-nav { 
-                top: 50%; transform: translateY(-50%); bottom: auto; left: 50%; width: 400px; translateX(-50%); height: auto; padding: 10px 0; 
-                flex-direction: row; /* Desktopda da horizontal olsun ki, indicator düz işləsin */
-                border-radius: 30px; 
-            }
-            .nav-item { font-size: 0.8rem; }
-            .nav-item svg { width: 26px; height: 26px; margin-bottom: 4px; }
-            
-            /* Göstərici desktopda da eyni işləyəcək */
-            .nav-indicator {
-                top: 5px;
-                bottom: 5px;
-                height: calc(100% - 10px);
+            .bottom-nav {
+                width: 400px; /* Daha yığcam */
+                left: 50%;
+                transform: translateX(-50%);
             }
         }
 
@@ -240,14 +249,22 @@
         .option-buttons { display: flex; gap: 10px; }
         .option-btn { padding: 10px; border: 2px solid #ccc; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 5px; font-size: 0.9rem; flex: 1; transition: all 0.3s ease; text-align: center; }
         .option-btn.active { border-color: var(--primary-color); background-color: var(--primary-color); color: white; }
+        
         .color-options { display: flex; gap: 15px; flex-wrap: wrap; }
         .color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; }
         .color-btn:hover { transform: scale(1.1); }
         .color-btn.active { border-color: var(--text-color); transform: scale(1.1); }
+        
         .custom-color-wrapper { position: relative; width: 40px; height: 40px; }
         #custom-color-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
-        .custom-btn { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); border: 2px solid transparent; border-radius: 50%; z-index: 1; display: flex; justify-content: center; align-items: center; }
+        .custom-btn { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); 
+            border: 2px solid transparent; border-radius: 50%; z-index: 1;
+            display: flex; justify-content: center; align-items: center;
+        }
         .custom-btn svg { width: 20px; height: 20px; fill: white; filter: drop-shadow(0 0 2px rgba(0,0,0,0.8)); }
+
         .profile-header { margin-bottom: 30px; text-align: center; }
         .profile-header img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #f4f4f4; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .profile-header h2 { margin-top: 15px; margin-bottom: 0; font-size: 1.8rem; color: var(--text-color); }
@@ -269,12 +286,11 @@
     <header id="main-header">
         <div id="branding"><h1 id="txt-brand">Taryel Hüseynzadə</h1></div>
         
+        <!-- YALNIZ MENYU QALIR (MƏZMUN LİNKLƏRİ BURADA VAR) -->
         <nav id="fullscreen-menu">
             <button id="menu-close">&times;</button>
             <ul>
                 <li><a href="#about" id="link-about">Haqqında</a></li>
-                <li><a href="#videos" id="link-videos">Videolar</a></li>
-                <li><a href="#articles" id="link-articles">Məqalələr</a></li>
                 <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
                 <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
                 <li><a href="#settings" id="link-settings">Ayarlar</a></li>
@@ -289,6 +305,7 @@
         </div>
     </header>
 
+    <!-- AYARLAR PANELİ -->
     <aside id="settings-panel" class="activity-panel">
         <div class="panel-header">
             <button id="settings-back-btn" class="panel-back-btn">
@@ -346,6 +363,7 @@
         </div>
     </aside>
 
+    <!-- HAQQINDA PANELİ -->
     <aside id="about-panel" class="activity-panel">
         <div class="panel-header">
             <button id="about-back-btn" class="panel-back-btn">
@@ -365,6 +383,7 @@
         </div>
     </aside>
 
+    <!-- ==== TAB VIEWS ==== -->
     <div id="view-home" class="tab-view active">
         <section id="banner">
             <div class="banner-text">
@@ -372,7 +391,6 @@
                 <p id="txt-welcome-desc">Səhifəni aşağı sürüşdürərək kəşf edin</p>
             </div>
         </section>
-
         <div class="container">
             <section class="card">
                 <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -387,44 +405,32 @@
 
     <div id="view-videos" class="tab-view">
         <div class="container">
-            <div class="view-header">
-                <h2 id="txt-videos-view-title">Videolar Bölməsi</h2>
-            </div>
-            
+            <div class="view-header"><h2 id="txt-videos-view-title">Videolar Bölməsi</h2></div>
             <div class="video-list">
                 <a href="https://youtu.be/PP5BympxEUQ?si=BOMsmEMz3twGHnpJ" target="_blank" class="video-item">
                     <div class="video-item-content">
                         <div class="video-thumb">
                             <img src="https://i.ytimg.com/vi_webp/PP5BympxEUQ/mqdefault.webp" alt="Video">
-                            <div class="play-icon-overlay">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
+                            <div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
                             <span class="video-duration">4:20</span>
                         </div>
                         <div class="video-info">
                             <h3 id="txt-video-1-title">Paketlənmiş məhsulların zərərləri</h3>
-                            <div class="video-meta">
-                                <span id="txt-video-1-date">2 aprel 2023</span>
-                            </div>
+                            <div class="video-meta"><span id="txt-video-1-date">2 aprel 2023</span></div>
                             <span class="watch-text" id="txt-watch-1">İzlə &rarr;</span>
                         </div>
                     </div>
                 </a>
-
                 <a href="https://youtu.be/9kLzT0T1mxM?si=3Sqmiihw-33CEMhZ" target="_blank" class="video-item">
                     <div class="video-item-content">
                         <div class="video-thumb">
-                            <img src="https://i.ytimg.com/vi/9kLzT0T1mxM/mqdefault.jpg?sqp=-oaymwEmCMACELQB8quKqQMa8AEB-AHOBYACgAqKAgwIABABGGUgVChGMA8=&rs=AOn4CLBel09-_L2np6GrrPPX7Se3zL8bCA" alt="Video Thumbnail">
-                            <div class="play-icon-overlay">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
+                            <img src="https://i.ytimg.com/vi/9kLzT0T1mxM/mqdefault.jpg?sqp=-oaymwEmCMACELQB8quKqQMa8AEB-AHOBYACgAqKAgwIABABGGUgVChGMA8=&rs=AOn4CLBel09-_L2np6GrrPPX7Se3zL8bCA" alt="Video">
+                            <div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
                             <span class="video-duration">1:03</span>
                         </div>
                         <div class="video-info">
                             <h3 id="txt-video-2-title">Bayatı kürd muğamı</h3>
-                            <div class="video-meta">
-                                <span id="txt-video-2-date">12 aprel 2024</span>
-                            </div>
+                            <div class="video-meta"><span id="txt-video-2-date">12 aprel 2024</span></div>
                             <span class="watch-text" id="txt-watch-2">İzlə &rarr;</span>
                         </div>
                     </div>
@@ -435,9 +441,7 @@
 
     <div id="view-articles" class="tab-view">
         <div class="container">
-            <div class="view-header">
-                <h2 id="txt-articles-view-title">Məqalələr Bölməsi</h2>
-            </div>
+            <div class="view-header"><h2 id="txt-articles-view-title">Məqalələr Bölməsi</h2></div>
             <section class="card">
                 <svg class="article-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -446,13 +450,13 @@
                 <p id="txt-articles-desc">Texnologiya və proqramlaşdırma haqqında yazılarım.</p>
                 <a href="#" class="btn-primary" id="txt-articles-btn">Oxu</a>
             </section>
-             <p style="text-align:center; color:#999; margin-top:20px;">Yeni məqalələr tezliklə...</p>
+            <p style="text-align:center; color:#999; margin-top:20px;">Yeni məqalələr tezliklə...</p>
         </div>
     </div>
     
-    <!-- LIQUID GLASS TAB MENYU (SLIDING INDICATOR İLƏ) -->
+    <!-- LIQUID GLASS TAB MENYU -->
     <nav class="bottom-nav">
-        <!-- GÖSTƏRİCİ ELEMENT -->
+        <!-- Rəngli fon üçün indicator -->
         <div class="nav-indicator"></div>
 
         <div class="nav-item active" data-target="home" data-text="Ev">
@@ -483,8 +487,6 @@
             
             const openSettingsLink = document.querySelector('a[href="#settings"]');
             const openAboutLink = document.querySelector('a[href="#about"]');
-            const openVideosLink = document.getElementById('link-videos');
-            const openArticlesLink = document.getElementById('link-articles');
             
             const settingsBackBtn = document.getElementById('settings-back-btn');
             const aboutBackBtn = document.getElementById('about-back-btn');
@@ -494,54 +496,6 @@
             const tabViews = document.querySelectorAll('.tab-view');
             const navIndicator = document.querySelector('.nav-indicator');
 
-            // TAB GÖSTƏRİCİSİNİ HƏRƏKƏT ETDİRƏN FUNKSİYA
-            function moveIndicator(element) {
-                // Desktop və Mobil yoxlanışı
-                if (window.innerWidth >= 768) {
-                    // Desktop (Vertical) - Əgər gələcəkdə sola keçsə, amma indi mərkəzdədir (horizontal)
-                    // Desktop üçün də horizontal olduğu üçün eyni məntiq işləyir, sadəcə container fərqlidir
-                    navIndicator.style.width = `${element.offsetWidth}px`;
-                    navIndicator.style.left = `${element.offsetLeft}px`;
-                } else {
-                    // Mobil (Horizontal)
-                    navIndicator.style.width = `${element.offsetWidth}px`;
-                    navIndicator.style.left = `${element.offsetLeft}px`;
-                }
-            }
-
-            // İlk yüklənəndə göstəricini yerləşdir
-            setTimeout(() => {
-                const activeTab = document.querySelector('.nav-item.active');
-                if (activeTab) moveIndicator(activeTab);
-            }, 100);
-
-            // Pəncərə ölçüsü dəyişəndə göstəricini yenilə
-            window.addEventListener('resize', () => {
-                const activeTab = document.querySelector('.nav-item.active');
-                if (activeTab) moveIndicator(activeTab);
-            });
-
-            // Tablara kliklədikdə
-            tabItems.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    
-                    // Aktiv klassları yenilə
-                    tabItems.forEach(item => item.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Görünüşləri yenilə
-                    tabViews.forEach(view => view.classList.remove('active'));
-                    document.getElementById('view-' + target).classList.add('active');
-                    
-                    // Göstəricini hərəkət etdir
-                    moveIndicator(this);
-                    
-                    window.scrollTo(0, 0);
-                });
-            });
-
-            // UI hadisələri
             window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
             menuToggle.addEventListener('click', () => fullscreenMenu.classList.add('active'));
             menuClose.addEventListener('click', () => fullscreenMenu.classList.remove('active'));
@@ -560,26 +514,53 @@
             });
             aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
 
-            if(openVideosLink) {
-                openVideosLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    fullscreenMenu.classList.remove('active');
-                    const videoTab = document.querySelector('.nav-item[data-target="videos"]');
-                    videoTab.click();
-                });
-            }
-            if(openArticlesLink) {
-                openArticlesLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    fullscreenMenu.classList.remove('active');
-                    const articleTab = document.querySelector('.nav-item[data-target="articles"]');
-                    articleTab.click();
-                });
-            }
-
             specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
 
-            // Ayarlar (Rəng, Dil, Tema)
+            // TAB FUNKSİONALLIĞI VƏ SÜRÜŞMƏ ANİMASİYASI
+            function moveIndicator(activeTab) {
+                if (window.innerWidth >= 768) {
+                     // Desktop (Horizontal Center)
+                     // Bu dizaynda desktopda da tablar horizontal olub (aşağıda)
+                     navIndicator.style.width = activeTab.offsetWidth + 'px';
+                     navIndicator.style.height = activeTab.offsetHeight + 'px';
+                     navIndicator.style.top = activeTab.offsetTop + 'px';
+                     navIndicator.style.left = activeTab.offsetLeft + 'px';
+                } else {
+                    // Mobile
+                    navIndicator.style.width = activeTab.offsetWidth + 'px';
+                    navIndicator.style.height = activeTab.offsetHeight + 'px';
+                    navIndicator.style.top = activeTab.offsetTop + 'px';
+                    navIndicator.style.left = activeTab.offsetLeft + 'px';
+                }
+            }
+
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    tabItems.forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    moveIndicator(this); // Indicatoru hərəkət etdir
+
+                    tabViews.forEach(view => view.classList.remove('active'));
+                    document.getElementById('view-' + target).classList.add('active');
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Ekran ölçüsü dəyişəndə indicatoru düzəlt
+            window.addEventListener('resize', () => {
+                const active = document.querySelector('.nav-item.active');
+                if(active) moveIndicator(active);
+            });
+
+            // İlk yükləmədə indicatoru təyin et
+            setTimeout(() => {
+                 const active = document.querySelector('.nav-item.active');
+                 if(active) moveIndicator(active);
+            }, 100);
+
+
             const themeLightBtn = document.getElementById('theme-light');
             const themeDarkBtn = document.getElementById('theme-dark');
             const themeSystemBtn = document.getElementById('theme-system');
@@ -650,7 +631,6 @@
                 document.getElementById('link-settings').textContent = t.linkSettings;
                 document.getElementById('link-videos').textContent = t.linkVideos; 
                 document.getElementById('link-articles').textContent = t.linkArticles; 
-                
                 document.getElementById('txt-settings-title').textContent = t.settingsTitle;
                 document.getElementById('txt-about-title').textContent = t.aboutTitle;
                 document.getElementById('txt-lang-title').textContent = t.langTitle;
@@ -671,32 +651,31 @@
                 document.getElementById('txt-yt-title').textContent = t.ytTitle;
                 document.getElementById('txt-yt-desc').textContent = t.ytDesc;
                 document.getElementById('txt-yt-btn').textContent = t.ytBtn;
-                
                 document.getElementById('txt-videos-view-title').textContent = t.videosViewTitle;
                 document.getElementById('txt-articles-view-title').textContent = t.articlesViewTitle;
                 document.getElementById('txt-articles-title').textContent = t.articlesTitle;
                 document.getElementById('txt-articles-desc').textContent = t.articlesDesc;
                 document.getElementById('txt-articles-btn').textContent = t.articlesBtn;
-
                 document.getElementById('txt-tab-home').textContent = t.tabHome;
                 document.getElementById('txt-tab-videos').textContent = t.tabVideos;
                 document.getElementById('txt-tab-articles').textContent = t.tabArticles;
-                
                 document.getElementById('txt-video-1-title').textContent = t.video1Title;
                 document.getElementById('txt-video-1-date').textContent = t.video1Date;
                 document.getElementById('txt-watch-1').innerHTML = t.watchText + ' &rarr;';
-                
                 document.getElementById('txt-video-2-title').textContent = t.video2Title;
                 document.getElementById('txt-video-2-date').textContent = t.video2Date;
                 document.getElementById('txt-watch-2').innerHTML = t.watchText + ' &rarr;';
-
                 document.querySelector('.nav-item[data-target="home"]').setAttribute('data-text', t.tabHome);
                 document.querySelector('.nav-item[data-target="videos"]').setAttribute('data-text', t.tabVideos);
                 document.querySelector('.nav-item[data-target="articles"]').setAttribute('data-text', t.tabArticles);
-                
                 customColorBtn.setAttribute('title', t.customColor);
-
                 localStorage.setItem('lang', lang);
+                
+                // Dil dəyişəndə indicatoru yenilə (mətn ölçüsü dəyişə bilər)
+                setTimeout(() => {
+                     const active = document.querySelector('.nav-item.active');
+                     if(active) moveIndicator(active);
+                }, 50);
             }
             langBtns.forEach(btn => btn.addEventListener('click', () => applyLanguage(btn.dataset.lang)));
 
@@ -718,12 +697,10 @@
                     document.body.classList.remove('rainbow-mode');
                     document.documentElement.style.setProperty('--primary-color', color);
                     localStorage.setItem('primaryColor', color);
-                    
                     if (!color.startsWith('#007bff') && !color.startsWith('#e74c3c') && !color.startsWith('#28a745') && !color.startsWith('#ffc107') && !color.startsWith('#9b59b6')) {
                          customColorBtn.style.background = color;
                     }
                 }
-
                 colorBtns.forEach(btn => {
                     btn.classList.remove('active');
                     if (btn.getAttribute('data-color') === color) {
@@ -733,13 +710,7 @@
                     }
                 });
             }
-
-            colorBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const color = btn.getAttribute('data-color');
-                    if (color) applyColor(color);
-                });
-            });
+            colorBtns.forEach(btn => { btn.addEventListener('click', () => { const color = btn.getAttribute('data-color'); if (color) applyColor(color); }); });
 
             function applyTheme(n){themeLightBtn.classList.remove('active');themeDarkBtn.classList.remove('active');themeSystemBtn.classList.remove('active');if(n==='light')themeLightBtn.classList.add('active');else if(n==='dark')themeDarkBtn.classList.add('active');else themeSystemBtn.classList.add('active');localStorage.setItem('theme',n);let e=n;if(n==='system')e=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(e==='dark')document.body.classList.add('dark-theme');else document.body.classList.remove('dark-theme');}
             themeLightBtn.addEventListener('click',()=>applyTheme('light'));themeDarkBtn.addEventListener('click',()=>applyTheme('dark'));themeSystemBtn.addEventListener('click',()=>applyTheme('system'));window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('theme')==='system')applyTheme('system');});
