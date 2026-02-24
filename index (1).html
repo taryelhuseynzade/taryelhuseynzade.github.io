@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taryel Hüseynzadə</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="main-header">
+        <div id="branding"><h1 id="txt-brand">Taryel Hüseynzadə</h1></div>
+        
+        <nav id="fullscreen-menu">
+            <button id="menu-close">&times;</button>
+            <ul>
+                <li><a href="about.html" id="link-about">Haqqında</a></li>
+                <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
+                <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
+                <li><a href="#settings" id="link-settings">Ayarlar</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-controls">
+            <button id="special-features-btn" aria-label="Xüsusi Özəlliklər">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button id="menu-toggle"><span class="line"></span><span class="line"></span><span class="line"></span></button>
+        </div>
+    </header>
+
+    <!-- AYARLAR PANELİ (WINDOW) -->
+    <aside id="settings-panel" class="activity-panel">
+        <div class="panel-header" id="settings-header">
+            <button id="settings-back-btn" class="panel-back-btn">
+                <!-- Material Design Back Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <div class="drag-handle"><h2 id="txt-settings-title">Ayarlar</h2></div>
+            <!-- Windows Controls -->
+            <div class="window-controls">
+                <button class="win-btn min-btn" title="Minimize">
+                    <svg width="10" height="1" viewBox="0 0 10 1" fill="currentColor"><rect width="10" height="1"></rect></svg>
+                </button>
+                <button class="win-btn max-btn" title="Maximize">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="9" height="9"></rect></svg>
+                </button>
+                <button class="win-btn close-btn" title="Close">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 1L9 9M9 1L1 9"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="panel-content">
+            <div class="settings-section">
+                <h3 id="txt-lang-title">Dil (Language)</h3>
+                <div class="option-buttons">
+                    <button class="option-btn lang-btn" data-lang="az">AZ</button>
+                    <button class="option-btn lang-btn" data-lang="en">EN</button>
+                    <button class="option-btn lang-btn" data-lang="ru">RU</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-access-title">Xüsusi İmkanlar</h3>
+                <span class="setting-label" id="txt-label-text">Mətn Ölçüsü</span>
+                <div class="option-buttons">
+                    <button id="text-normal" class="option-btn active">Normal</button>
+                    <button id="text-large" class="option-btn">Böyük</button>
+                </div>
+                <span class="setting-label" id="txt-label-anim">Animasiyalar</span>
+                <div class="option-buttons">
+                    <button id="anim-on" class="option-btn active">Aktiv</button>
+                    <button id="anim-off" class="option-btn">Dayandır</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-theme-title">Tema</h3>
+                <div class="option-buttons">
+                    <button id="theme-light" class="option-btn">İşıqlı</button>
+                    <button id="theme-dark" class="option-btn">Qaranlıq</button>
+                    <button id="theme-system" class="option-btn">Sistem</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-color-title">Rəng Palitrası</h3>
+                <div class="color-options">
+                    <button class="color-btn" data-color="rainbow" style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"></button>
+                    <div class="custom-color-wrapper">
+                        <input type="color" id="custom-color-input">
+                        <button class="color-btn custom-btn" id="custom-color-btn" title="Fərdi">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                        </button>
+                    </div>
+                    <button class="color-btn" data-color="#007bff" style="background-color: #007bff;"></button>
+                    <button class="color-btn" data-color="#e74c3c" style="background-color: #e74c3c;"></button>
+                    <button class="color-btn" data-color="#28a745" style="background-color: #28a745;"></button>
+                    <button class="color-btn" data-color="#ffc107" style="background-color: #ffc107;"></button>
+                    <button class="color-btn" data-color="#9b59b6" style="background-color: #9b59b6;"></button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- VIEWS -->
+    <div id="view-home" class="tab-view active">
+        <section id="banner">
+            <div class="banner-text">
+                <h2 id="txt-welcome">Xoş Gəlmisiniz!</h2>
+                <p id="txt-welcome-desc">Səhifəni aşağı sürüşdürərək kəşf edin</p>
+            </div>
+        </section>
+        <div class="container">
+            <section class="card">
+                <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+                <h3 id="txt-yt-title">YouTube Kanalım</h3>
+                <p id="txt-yt-desc">Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.</p>
+                <a href="https://youtube.com/@taryelhuseynzade?si=gS3cNvQuY6zTR0ZL" target="_blank" class="btn-youtube" id="txt-yt-btn">Kanalı Ziyarət Et</a>
+            </section>
+        </div>
+    </div>
+    
+    <div id="view-videos" class="tab-view">
+        <div class="container">
+            <div class="view-header"><h2 id="txt-videos-view-title">Videolar Bölməsi</h2></div>
+            <div class="video-list">
+                <a href="https://youtu.be/PP5BympxEUQ?si=BOMsmEMz3twGHnpJ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb"><img src="https://i.ytimg.com/vi_webp/PP5BympxEUQ/mqdefault.webp" alt="Video"><div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><span class="video-duration">4:20</span></div>
+                        <div class="video-info"><h3 id="txt-video-1-title">Paketlənmiş məhsulların zərərləri</h3><div class="video-meta"><span id="txt-video-1-date">2 aprel 2023</span></div><span class="watch-text" id="txt-watch-1">İzlə &rarr;</span></div>
+                    </div>
+                </a>
+                <a href="https://youtu.be/9kLzT0T1mxM?si=3Sqmiihw-33CEMhZ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb"><img src="https://i.ytimg.com/vi/9kLzT0T1mxM/mqdefault.jpg?sqp=-oaymwEmCMACELQB8quKqQMa8AEB-AHOBYACgAqKAgwIABABGGUgVChGMA8=&rs=AOn4CLBel09-_L2np6GrrPPX7Se3zL8bCA" alt="Video"><div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><span class="video-duration">1:03</span></div>
+                        <div class="video-info"><h3 id="txt-video-2-title">Bayatı kürd muğamı</h3><div class="video-meta"><span id="txt-video-2-date">12 aprel 2024</span></div><span class="watch-text" id="txt-watch-2">İzlə &rarr;</span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-articles" class="tab-view">
+        <div class="container">
+            <div class="view-header"><h2 id="txt-articles-view-title">Məqalələr Bölməsi</h2></div>
+            <section class="card">
+                <svg class="article-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                <h3 id="txt-articles-title">Məqalələr</h3>
+                <p id="txt-articles-desc">Texnologiya və proqramlaşdırma haqqında yazılarım.</p>
+                <a href="#" class="btn-primary" id="txt-articles-btn">Oxu</a>
+            </section>
+             <p style="text-align:center; color:#999; margin-top:20px;">Yeni məqalələr tezliklə...</p>
+        </div>
+    </div>
+    
+    <nav class="bottom-nav">
+        <div class="nav-indicator"></div>
+        <div class="nav-item active" data-target="home" data-text="Ev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span id="txt-tab-home">Ev</span></div>
+        <div class="nav-item" data-target="videos" data-text="Videolar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg><span id="txt-tab-videos">Videolar</span></div>
+        <div class="nav-item" data-target="articles" data-text="Məqalələr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h5v2zm4-8H9V5h10v2z"/></svg><span id="txt-tab-articles">Məqalələr</span></div>
+    </nav>
+
+    <footer><p>Taryel Hüseynzadə &copy; 2025</p></footer>
+    
+    <script src="main.js"></script>
+</body>
+</html>
