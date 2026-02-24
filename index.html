@@ -1,14 +1,783 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="az">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taryel Hüseynzadə</title>
+    <style>
+        /* --- CSS DƏYİŞƏNLƏRİ --- */
+        :root {
+            --primary-color: #007bff; 
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --card-bg: #fff;
+            --panel-bg: #fff;
+            --header-text: #333;
+            --shadow: rgba(0,0,0,0.1);
+            --base-size: 16px;
+            --bottom-nav-height: 70px;
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        body.dark-theme {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --panel-bg: #252525;
+            --header-text: #e0e0e0;
+            --shadow: rgba(255,255,255,0.05);
+
+            --glass-bg: rgba(30, 30, 30, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        html.large-text { font-size: 120%; }
+        html.no-anim *, html.no-anim *:before, html.no-anim *:after { transition: none !important; scroll-behavior: auto !important; animation: none !important; }
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0;
+            background-color: var(--bg-color); color: var(--text-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-bottom: 100px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: transparent; 
+            color: var(--header-text); 
+            padding: 15px 5%;
+            position: fixed; top: 0; width: 90%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s ease;
+        }
+        
+        header.scrolled {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 10px 5%;
+            box-shadow: var(--shadow);
+        }
+        
+        header h1 { margin: 0; font-size: 1.5rem; color: inherit; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        
+        #special-features-btn { background: none; border: none; cursor: pointer; padding: 0; color: var(--header-text); display: flex; align-items: center; justify-content: center; }
+        #special-features-btn svg { width: 28px; height: 28px; transition: transform 0.3s ease; fill: currentColor; }
+        #special-features-btn:hover svg { transform: scale(1.1); fill: var(--primary-color); }
+        
+        #menu-toggle { background: none; border: none; cursor: pointer; padding: 0; display: flex; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; z-index: 2001; }
+        #menu-toggle .line { width: 100%; height: 3px; background-color: var(--header-text); border-radius: 2px; }
+        
+        /* --- MENYU (Tam Ekran) --- */
+        #fullscreen-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); z-index: 2000;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        #fullscreen-menu.active { opacity: 1; visibility: visible; }
+        #fullscreen-menu ul { list-style: none; padding: 0; text-align: center; margin: 0; display: flex; flex-direction: column; }
+        #fullscreen-menu li { margin: 20px 0; }
+        #fullscreen-menu a { color: white; text-decoration: none; font-size: 2rem; transition: color 0.3s ease; }
+        #fullscreen-menu a:hover { color: var(--primary-color); }
+        #menu-close { position: absolute; top: 30px; right: 5%; background: none; border: none; color: white; font-size: 40px; cursor: pointer; }
+
+        @media (min-width: 768px) {
+            body { padding-bottom: 0; padding-left: 0; }
+            header { 
+                width: calc(100% - 10%); padding: 15px 5%;
+                flex-direction: row; justify-content: space-between; left: 0;
+                transform: none; background: transparent; border: none; box-shadow: none;
+            }
+            header.scrolled { width: calc(100% - 10%); left: 0; transform: none; border-radius: 0; border-top: none; }
+            #branding { margin-bottom: 0; text-align: left; }
+            .header-controls { position: relative; right: auto; top: auto; }
+            #menu-toggle, #menu-close { display: flex !important; }
+            #menu-close { display: block !important; }
+            #fullscreen-menu { position: fixed; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); display: flex; flex-direction: column; opacity: 0; visibility: hidden; z-index: 2000; }
+            #fullscreen-menu.active { opacity: 1; visibility: visible; }
+        }
+
+        /* --- ACTIVITY PANELS (Responsive Window Logic) --- */
+        .activity-panel { 
+            position: fixed; top: 0; right: 0; width: 100%; height: 100%; 
+            background-color: var(--panel-bg); color: var(--text-color); 
+            z-index: 3000; 
+            transform: translateX(100%); transition: transform 0.4s ease-in-out; 
+            display: flex; flex-direction: column; 
+        }
+        .activity-panel.active { transform: translateX(0); }
+        
+        .panel-header { display: flex; align-items: center; padding: 10px 15px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; color: #333; user-select: none; }
+        body.dark-theme .panel-header { background-color: #333; color: #fff; border-bottom-color: #444; }
+        
+        .panel-back-btn { background: none; border: none; cursor: pointer; margin-right: 15px; padding: 0; display: flex; align-items: center; color: inherit; }
+        /* Material Icon üçün stil */
+        .panel-back-btn svg { width: 24px; height: 24px; fill: currentColor; display: block; }
+        .panel-back-btn:hover { transform: translateX(-3px); }
+        
+        .panel-header h2 { margin: 0; font-size: 1rem; flex-grow: 1; }
+        .panel-content { padding: 20px; flex-grow: 1; overflow-y: auto; }
+
+        /* Windows Kontrol Düymələri (Mobildə gizlidir) */
+        .window-controls { display: none; gap: 0; height: 100%; }
+        .win-btn { 
+            background: transparent; border: none; width: 46px; height: 32px; 
+            font-size: 14px; cursor: pointer; color: inherit; display: flex; align-items: center; justify-content: center;
+            transition: background-color 0.2s; 
+        }
+        .win-btn:hover { background-color: rgba(0,0,0,0.1); }
+        body.dark-theme .win-btn:hover { background-color: rgba(255,255,255,0.1); }
+        .win-btn.close-btn:hover { background-color: #e81123; color: white; }
+
+        /* --- DESKTOP WINDOW STYLING --- */
+        @media (min-width: 768px) { 
+            .activity-panel {
+                width: 500px; height: 600px;
+                top: 50%; left: 50%;
+                bottom: auto; right: auto;
+                transform: translate(-50%, -50%) scale(0.9);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+                border-radius: 8px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+                border: 1px solid rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+            body.dark-theme .activity-panel { border: 1px solid #444; }
+
+            .activity-panel.active {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .activity-panel.dragging, .activity-panel.positioned { transform: none !important; }
+            
+            .activity-panel.maximized {
+                width: 100% !important; height: 100% !important;
+                top: 0 !important; left: 0 !important;
+                border-radius: 0; transform: none !important;
+            }
+
+            .panel-header { cursor: default; padding: 0 0 0 15px; height: 40px; }
+            .drag-handle { flex-grow: 1; height: 100%; display: flex; align-items: center; cursor: move; }
+            
+            .panel-back-btn { display: none; } /* Mobildəki geri düyməsi gizlənir */
+            .window-controls { display: flex; align-items: center; } 
+            
+            .panel-content { background: var(--card-bg); padding: 20px; }
+        }
+
+        /* --- VIEWS --- */
+        .tab-view { display: none; padding-top: 100px; min-height: 100vh; animation: fadeIn 0.3s ease; }
+        .tab-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #banner { height: 60vh; margin-top: -100px; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: #fff; }
+        .banner-text h2 { font-size: 3rem; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .banner-text p { font-size: 1.25rem; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+
+        .container { width: 90%; max-width: 800px; margin: auto; overflow: hidden; padding: 20px 0; }
+        .view-header { text-align: center; margin-bottom: 30px; padding: 20px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 2px 10px var(--shadow); }
+        .view-header h2 { margin: 0; color: var(--primary-color); }
+
+        /* --- LIQUID GLASS TAB MENYU --- */
+        .bottom-nav { 
+            position: fixed; bottom: 20px; left: 5%; width: 90%; height: var(--bottom-nav-height); 
+            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); border-radius: 25px;
+            display: flex; justify-content: space-around; align-items: center; z-index: 2500; transition: all 0.3s ease;
+        }
+        
+        .nav-indicator { position: absolute; height: 100%; background-color: var(--primary-color); border-radius: 20px; z-index: -1; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); top: 0; left: 0; width: 0; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-color); font-size: 0.75rem; flex-grow: 1; height: 100%; cursor: pointer; transition: color 0.3s ease; border-radius: 20px; margin: 5px; background: transparent !important; box-shadow: none !important; position: relative; z-index: 1; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 2px; transition: transform 0.2s ease; }
+        .nav-item:hover { color: var(--primary-color); } .nav-item:hover svg { transform: scale(1.1); }
+        .nav-item.active { color: #fff; font-weight: bold; } .nav-item.active svg { fill: #fff; }
+
+        @media (min-width: 768px) {
+            .bottom-nav { top: 50%; transform: translateY(-50%); bottom: auto; left: 20px; width: 80px; height: auto; padding: 20px 0; flex-direction: column; justify-content: center; gap: 15px; border-radius: 30px; }
+            .nav-item { flex-grow: 0; height: 60px; width: 60px; font-size: 0; margin: 0; border-radius: 50%; }
+            .nav-item svg { width: 28px; height: 28px; margin: 0; }
+            .nav-indicator { width: 60px !important; height: 60px !important; border-radius: 50%; left: 10px !important; }
+        }
+        
+        /* Video & Digər Elementlər */
+        .video-list { display: flex; flex-direction: column; gap: 15px; }
+        .video-item { display: block; text-decoration: none; color: inherit; background: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px var(--shadow); transition: background-color 0.3s ease; }
+        .video-item:hover { background-color: rgba(0,0,0,0.03); }
+        .video-item-content { display: flex; flex-direction: row; padding: 10px; gap: 12px; align-items: flex-start; }
+        .video-thumb { position: relative; width: 140px; height: 80px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+        .video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .video-duration { position: absolute; bottom: 4px; right: 4px; background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 2px 4px; font-size: 0.7rem; border-radius: 4px; font-weight: bold; }
+        .play-icon-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .play-icon-overlay svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
+        .video-info { display: flex; flex-direction: column; justify-content: flex-start; flex-grow: 1; }
+        .video-info h3 { margin: 0 0 5px 0; font-size: 1rem; line-height: 1.3; color: var(--text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-meta { font-size: 0.8rem; color: var(--text-color); opacity: 0.7; margin-top: auto; }
+        .watch-text { display: block; margin-top: 5px; color: var(--primary-color); font-weight: bold; font-size: 0.85rem; }
+        @media (min-width: 768px) { .video-item-content { flex-direction: row; } .video-thumb { width: 200px; height: 112px; } .video-info { width: auto; } }
+
+        /* Elementlər */
+        .settings-section { margin-bottom: 30px; text-align: left; }
+        .settings-section h3 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .setting-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; }
+        .option-buttons { display: flex; gap: 10px; }
+        .option-btn { padding: 10px; border: 2px solid #ccc; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 5px; font-size: 0.9rem; flex: 1; transition: all 0.3s ease; text-align: center; }
+        .option-btn.active { border-color: var(--primary-color); background-color: var(--primary-color); color: white; }
+        
+        .color-options { display: flex; gap: 15px; flex-wrap: wrap; }
+        .color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: var(--text-color); transform: scale(1.1); }
+        
+        .custom-color-wrapper { position: relative; width: 40px; height: 40px; }
+        #custom-color-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
+        .custom-btn { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); border: 2px solid transparent; border-radius: 50%; z-index: 1; display: flex; justify-content: center; align-items: center; }
+        .custom-btn svg { width: 20px; height: 20px; fill: white; filter: drop-shadow(0 0 2px rgba(0,0,0,0.8)); }
+
+        .profile-header { margin-bottom: 30px; text-align: center; }
+        .profile-header img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #f4f4f4; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .profile-header h2 { margin-top: 15px; margin-bottom: 0; font-size: 1.8rem; color: var(--text-color); }
+        .github-btn { display: inline-flex; align-items: center; gap: 10px; background-color: #24292e; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; transition: background-color 0.3s ease, transform 0.3s ease; }
+        .github-btn:hover { background-color: #444; transform: translateY(-2px); }
+        .github-btn svg { fill: #fff; width: 20px; height: 20px; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow); text-align: center; max-width: 600px; margin: 0 auto 30px auto; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .youtube-icon, .video-icon, .article-icon { width: 64px; height: 64px; fill: var(--primary-color); margin-bottom: 15px; transition: fill 0.3s ease; }
+        .card h3 { margin: 10px 0; font-size: 1.5rem; }
+        .card p { color: var(--text-color); margin-bottom: 25px; opacity: 0.8; }
+        .btn-youtube { display: inline-block; background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 200% 100%; color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: all 0.4s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .btn-youtube:hover { background-position: 100% 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transform: scale(1.05); }
+        .btn-primary { display: inline-block; background-color: var(--primary-color); color: white; padding: 12px 24px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1rem; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
+    </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <header id="main-header">
+        <div id="branding"><h1 id="txt-brand">Taryel Hüseynzadə</h1></div>
+        
+        <nav id="fullscreen-menu">
+            <button id="menu-close">&times;</button>
+            <ul>
+                <li><a href="#about" id="link-about">Haqqında</a></li>
+                <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
+                <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
+                <li><a href="#settings" id="link-settings">Ayarlar</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-controls">
+            <button id="special-features-btn" aria-label="Xüsusi Özəlliklər">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button id="menu-toggle"><span class="line"></span><span class="line"></span><span class="line"></span></button>
+        </div>
+    </header>
+
+    <!-- AYARLAR PANELİ (WINDOW) -->
+    <aside id="settings-panel" class="activity-panel">
+        <div class="panel-header" id="settings-header">
+            <button id="settings-back-btn" class="panel-back-btn">
+                <!-- Material Design Back Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <div class="drag-handle"><h2 id="txt-settings-title">Ayarlar</h2></div>
+            <!-- Windows Controls -->
+            <div class="window-controls">
+                <button class="win-btn min-btn" title="Minimize">
+                    <svg width="10" height="1" viewBox="0 0 10 1" fill="currentColor"><rect width="10" height="1"></rect></svg>
+                </button>
+                <button class="win-btn max-btn" title="Maximize">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="9" height="9"></rect></svg>
+                </button>
+                <button class="win-btn close-btn" title="Close">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 1L9 9M9 1L1 9"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div class="panel-content">
+            <div class="settings-section">
+                <h3 id="txt-lang-title">Dil (Language)</h3>
+                <div class="option-buttons">
+                    <button class="option-btn lang-btn" data-lang="az">AZ</button>
+                    <button class="option-btn lang-btn" data-lang="en">EN</button>
+                    <button class="option-btn lang-btn" data-lang="ru">RU</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-access-title">Xüsusi İmkanlar</h3>
+                <span class="setting-label" id="txt-label-text">Mətn Ölçüsü</span>
+                <div class="option-buttons">
+                    <button id="text-normal" class="option-btn active">Normal</button>
+                    <button id="text-large" class="option-btn">Böyük</button>
+                </div>
+                <span class="setting-label" id="txt-label-anim">Animasiyalar</span>
+                <div class="option-buttons">
+                    <button id="anim-on" class="option-btn active">Aktiv</button>
+                    <button id="anim-off" class="option-btn">Dayandır</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-theme-title">Tema</h3>
+                <div class="option-buttons">
+                    <button id="theme-light" class="option-btn">İşıqlı</button>
+                    <button id="theme-dark" class="option-btn">Qaranlıq</button>
+                    <button id="theme-system" class="option-btn">Sistem</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3 id="txt-color-title">Rəng Palitrası</h3>
+                <div class="color-options">
+                    <button class="color-btn" data-color="rainbow" style="background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"></button>
+                    <div class="custom-color-wrapper">
+                        <input type="color" id="custom-color-input">
+                        <button class="color-btn custom-btn" id="custom-color-btn" title="Fərdi">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                        </button>
+                    </div>
+                    <button class="color-btn" data-color="#007bff" style="background-color: #007bff;"></button>
+                    <button class="color-btn" data-color="#e74c3c" style="background-color: #e74c3c;"></button>
+                    <button class="color-btn" data-color="#28a745" style="background-color: #28a745;"></button>
+                    <button class="color-btn" data-color="#ffc107" style="background-color: #ffc107;"></button>
+                    <button class="color-btn" data-color="#9b59b6" style="background-color: #9b59b6;"></button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- HAQQINDA PANELİ (WINDOW) -->
+    <aside id="about-panel" class="activity-panel">
+        <div class="panel-header" id="about-header">
+            <button id="about-back-btn" class="panel-back-btn">
+                <!-- Material Design Back Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <div class="drag-handle"><h2 id="txt-about-title">Haqqında</h2></div>
+            <!-- Windows Controls -->
+            <div class="window-controls">
+                <button class="win-btn min-btn" title="Minimize">
+                    <svg width="10" height="1" viewBox="0 0 10 1" fill="currentColor"><rect width="10" height="1"></rect></svg>
+                </button>
+                <button class="win-btn max-btn" title="Maximize">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="9" height="9"></rect></svg>
+                </button>
+                <button class="win-btn close-btn" title="Close">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 1L9 9M9 1L1 9"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div class="panel-content">
+            <div class="profile-header">
+                <img src="logo.jpg" alt="Logo">
+                <h2>Taryel Hüseynzadə</h2>
+            </div>
+            <a href="https://GitHub.com/TaryelHuseynzade/TaryelHuseynzade.github.io" target="_blank" class="github-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                Mənbə Kodu
+            </a>
+        </div>
+    </aside>
+
+    <!-- VIEWS -->
+    <div id="view-home" class="tab-view active">
+        <section id="banner">
+            <div class="banner-text">
+                <h2 id="txt-welcome">Xoş Gəlmisiniz!</h2>
+                <p id="txt-welcome-desc">Səhifəni aşağı sürüşdürərək kəşf edin</p>
+            </div>
+        </section>
+        <div class="container">
+            <section class="card">
+                <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+                <h3 id="txt-yt-title">YouTube Kanalım</h3>
+                <p id="txt-yt-desc">Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.</p>
+                <a href="https://youtube.com/@taryelhuseynzade?si=gS3cNvQuY6zTR0ZL" target="_blank" class="btn-youtube" id="txt-yt-btn">Kanalı Ziyarət Et</a>
+            </section>
+        </div>
+    </div>
+    
+    <div id="view-videos" class="tab-view">
+        <div class="container">
+            <div class="view-header"><h2 id="txt-videos-view-title">Videolar Bölməsi</h2></div>
+            <div class="video-list">
+                <a href="https://youtu.be/PP5BympxEUQ?si=BOMsmEMz3twGHnpJ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb"><img src="https://i.ytimg.com/vi_webp/PP5BympxEUQ/mqdefault.webp" alt="Video"><div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><span class="video-duration">4:20</span></div>
+                        <div class="video-info"><h3 id="txt-video-1-title">Paketlənmiş məhsulların zərərləri</h3><div class="video-meta"><span id="txt-video-1-date">2 aprel 2023</span></div><span class="watch-text" id="txt-watch-1">İzlə &rarr;</span></div>
+                    </div>
+                </a>
+                <a href="https://youtu.be/9kLzT0T1mxM?si=3Sqmiihw-33CEMhZ" target="_blank" class="video-item">
+                    <div class="video-item-content">
+                        <div class="video-thumb"><img src="https://i.ytimg.com/vi/9kLzT0T1mxM/mqdefault.jpg?sqp=-oaymwEmCMACELQB8quKqQMa8AEB-AHOBYACgAqKAgwIABABGGUgVChGMA8=&rs=AOn4CLBel09-_L2np6GrrPPX7Se3zL8bCA" alt="Video"><div class="play-icon-overlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><span class="video-duration">1:03</span></div>
+                        <div class="video-info"><h3 id="txt-video-2-title">Bayatı kürd muğamı</h3><div class="video-meta"><span id="txt-video-2-date">12 aprel 2024</span></div><span class="watch-text" id="txt-watch-2">İzlə &rarr;</span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-articles" class="tab-view">
+        <div class="container">
+            <div class="view-header"><h2 id="txt-articles-view-title">Məqalələr Bölməsi</h2></div>
+            <section class="card">
+                <svg class="article-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                <h3 id="txt-articles-title">Məqalələr</h3>
+                <p id="txt-articles-desc">Texnologiya və proqramlaşdırma haqqında yazılarım.</p>
+                <a href="#" class="btn-primary" id="txt-articles-btn">Oxu</a>
+            </section>
+             <p style="text-align:center; color:#999; margin-top:20px;">Yeni məqalələr tezliklə...</p>
+        </div>
+    </div>
+    
+    <nav class="bottom-nav">
+        <div class="nav-indicator"></div>
+        <div class="nav-item active" data-target="home" data-text="Ev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span id="txt-tab-home">Ev</span></div>
+        <div class="nav-item" data-target="videos" data-text="Videolar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg><span id="txt-tab-videos">Videolar</span></div>
+        <div class="nav-item" data-target="articles" data-text="Məqalələr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h5v2zm4-8H9V5h10v2z"/></svg><span id="txt-tab-articles">Məqalələr</span></div>
+    </nav>
+
+    <footer><p>Taryel Hüseynzadə &copy; 2025</p></footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('main-header');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuClose = document.getElementById('menu-close');
+            const fullscreenMenu = document.getElementById('fullscreen-menu');
+            
+            const settingsPanel = document.getElementById('settings-panel');
+            const aboutPanel = document.getElementById('about-panel');
+            
+            const settingsBackBtn = document.getElementById('settings-back-btn');
+            const aboutBackBtn = document.getElementById('about-back-btn');
+            const specialFeaturesBtn = document.getElementById('special-features-btn');
+
+            const tabItems = document.querySelectorAll('.nav-item');
+            const tabViews = document.querySelectorAll('.tab-view');
+            const navIndicator = document.querySelector('.nav-indicator');
+
+            // --- DRAG WINDOW LOGIC ---
+            let zIndexCounter = 3001;
+            
+            function makeDraggable(panel) {
+                const header = panel.querySelector('.drag-handle');
+                if(!header) return;
+
+                let isDragging = false;
+                let offsetX, offsetY;
+
+                header.addEventListener('mousedown', (e) => {
+                    // Yalnız desktopda işləsin
+                    if(window.innerWidth < 768) return;
+
+                    isDragging = true;
+                    panel.style.zIndex = ++zIndexCounter; // Önə gətir
+                    
+                    // Transformu ləğv etmək üçün class əlavə et
+                    panel.classList.add('dragging');
+
+                    // Cari pozisiyanı hesabla (transform: none olduqda left/top işləyir)
+                    const rect = panel.getBoundingClientRect();
+                    
+                    // İlk sürükləmədə (əgər hələ positionlanmayıbsa)
+                    if (!panel.style.left) {
+                        panel.style.left = rect.left + 'px';
+                        panel.style.top = rect.top + 'px';
+                        // Transformu vizual olaraq sıfırla ki, tullanma olmasın
+                        panel.style.transform = 'none';
+                    }
+
+                    offsetX = e.clientX - rect.left;
+                    offsetY = e.clientY - rect.top;
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+
+                function onMouseMove(e) {
+                    if (!isDragging) return;
+                    let x = e.clientX - offsetX;
+                    let y = e.clientY - offsetY;
+                    
+                    // Ekran kənarlarına çıxmağın qarşısını almaq (optional)
+                    if(y < 0) y = 0;
+                    
+                    panel.style.left = x + 'px';
+                    panel.style.top = y + 'px';
+                }
+
+                function onMouseUp() {
+                    isDragging = false;
+                    panel.classList.remove('dragging');
+                    panel.classList.add('positioned'); // Artıq koordinatları var
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                }
+            }
+
+            // Pəncərə funksiyaları (Windows stilində)
+            function setupWindowControls(panel) {
+                const closeBtn = panel.querySelector('.close-btn');
+                const maxBtn = panel.querySelector('.max-btn');
+                const minBtn = panel.querySelector('.min-btn');
+
+                // Pəncərəni açanda mərkəzləşdir (reset)
+                panel.resetPosition = function() {
+                    panel.style.left = '';
+                    panel.style.top = '';
+                    panel.style.transform = ''; // CSS-ə qayıt
+                    panel.classList.remove('positioned');
+                    panel.classList.remove('maximized');
+                    panel.style.zIndex = ++zIndexCounter;
+                };
+
+                // Clickləyəndə önə gətir
+                panel.addEventListener('mousedown', () => {
+                    panel.style.zIndex = ++zIndexCounter;
+                });
+
+                if(closeBtn) closeBtn.addEventListener('click', () => {
+                    panel.classList.remove('active');
+                });
+
+                if(minBtn) minBtn.addEventListener('click', () => {
+                    // Minimize hələlik bağlamaq kimi işləsin (Taskbar yoxdur)
+                    panel.classList.remove('active');
+                });
+
+                if(maxBtn) maxBtn.addEventListener('click', () => {
+                    panel.classList.toggle('maximized');
+                });
+                
+                makeDraggable(panel);
+            }
+
+            setupWindowControls(settingsPanel);
+            setupWindowControls(aboutPanel);
+
+            // --- MENU LINKS ---
+            function openPanel(panel) {
+                fullscreenMenu.classList.remove('active');
+                if(window.innerWidth >= 768) {
+                    if(panel.resetPosition) panel.resetPosition();
+                }
+                setTimeout(() => { panel.classList.add('active'); }, 100);
+            }
+
+            document.querySelector('a[href="#settings"]').addEventListener('click', (e) => {
+                e.preventDefault(); openPanel(settingsPanel);
+            });
+
+            document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
+                e.preventDefault(); openPanel(aboutPanel);
+            });
+            
+            // Mobil Geri düymələri
+            settingsBackBtn.addEventListener('click', () => { settingsPanel.classList.remove('active'); });
+            aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
+
+
+            // --- STANDARD JS (Scroll, Tabs, Theme, etc.) ---
+            window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
+            menuToggle.addEventListener('click', () => fullscreenMenu.classList.add('active'));
+            menuClose.addEventListener('click', () => fullscreenMenu.classList.remove('active'));
+            
+            specialFeaturesBtn.addEventListener('click', () => { alert("Special Features tezliklə!"); });
+
+            function updateIndicator() {
+                const activeTab = document.querySelector('.nav-item.active');
+                if (activeTab && navIndicator) {
+                    if (window.innerWidth >= 768) {
+                        navIndicator.style.top = activeTab.offsetTop + 'px';
+                        navIndicator.style.left = '10px';
+                        navIndicator.style.width = '60px'; navIndicator.style.height = '60px';
+                        navIndicator.style.borderRadius = '50%';
+                    } else {
+                        navIndicator.style.left = activeTab.offsetLeft + 'px';
+                        navIndicator.style.width = activeTab.offsetWidth + 'px';
+                        navIndicator.style.top = '0'; navIndicator.style.height = '100%';
+                        navIndicator.style.borderRadius = '20px';
+                    }
+                }
+            }
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    tabItems.forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    updateIndicator();
+                    tabViews.forEach(view => view.classList.remove('active'));
+                    document.getElementById('view-' + target).classList.add('active');
+                    window.scrollTo(0, 0);
+                });
+            });
+            window.addEventListener('resize', updateIndicator);
+            setTimeout(updateIndicator, 100);
+
+            // Settings Logic
+            const themeLightBtn = document.getElementById('theme-light');
+            const themeDarkBtn = document.getElementById('theme-dark');
+            const themeSystemBtn = document.getElementById('theme-system');
+            const textNormalBtn = document.getElementById('text-normal');
+            const textLargeBtn = document.getElementById('text-large');
+            const animOnBtn = document.getElementById('anim-on');
+            const animOffBtn = document.getElementById('anim-off');
+            const colorBtns = document.querySelectorAll('.color-btn');
+            const langBtns = document.querySelectorAll('.lang-btn');
+            const customColorBtn = document.getElementById('custom-color-btn');
+            const customColorInput = document.getElementById('custom-color-input');
+
+            customColorBtn.addEventListener('click', () => { customColorInput.click(); });
+            customColorInput.addEventListener('input', (e) => { applyColor(e.target.value); });
+
+             const translations = {
+                az: {
+                    brand: "Taryel Hüseynzadə", 
+                    linkAbout: "Haqqında", linkLicense: "Açıq mənbə lisenziyası", linkHelp: "Kömək & Dəstək", linkSettings: "Ayarlar", 
+                    settingsTitle: "Ayarlar", aboutTitle: "Haqqında", langTitle: "Dil (Language)", accessTitle: "Xüsusi İmkanlar", labelText: "Mətn Ölçüsü", labelAnim: "Animasiyalar", textNorm: "Normal", textLarge: "Böyük", animOn: "Aktiv", animOff: "Dayandır", themeTitle: "Tema", themeLight: "İşıqlı", themeDark: "Qaranlıq", themeSystem: "Sistem", colorTitle: "Rəng Palitrası", welcome: "Xoş Gəlmisiniz!", welcomeDesc: "Səhifəni aşağı sürüşdürərək kəşf edin", 
+                    ytTitle: "YouTube Kanalım", ytDesc: "Videolarımı izləmək və yeniliklərdən xəbərdar olmaq üçün kanalıma abunə olun.", ytBtn: "Kanalı Ziyarət Et",
+                    videosViewTitle: "Videolar Bölməsi", articlesViewTitle: "Məqalələr Bölməsi",
+                    articlesTitle: "Məqalələr", articlesDesc: "Texnologiya və proqramlaşdırma haqqında yazılarım.", articlesBtn: "Oxu",
+                    tabHome: "Ev", tabVideos: "Videolar", tabArticles: "Məqalələr",
+                    watchText: "İzlə",
+                    video1Title: "Paketlənmiş məhsulların zərərləri", video1Date: "2 aprel 2023",
+                    video2Title: "Bayatı kürd muğamı", video2Date: "12 aprel 2024",
+                    customColor: "Fərdi"
+                },
+                en: {
+                    brand: "Taryel Huseynzade", 
+                    linkAbout: "About", linkLicense: "Open Source License", linkHelp: "Help & Support", linkSettings: "Settings", 
+                    settingsTitle: "Settings", aboutTitle: "About", langTitle: "Language", accessTitle: "Accessibility", labelText: "Text Size", labelAnim: "Animations", textNorm: "Normal", textLarge: "Large", animOn: "On", animOff: "Off", themeTitle: "Theme", themeLight: "Light", themeDark: "Dark", themeSystem: "System", colorTitle: "Color Palette", welcome: "Welcome!", welcomeDesc: "Scroll down to discover", 
+                    ytTitle: "My YouTube Channel", ytDesc: "Subscribe to my channel to watch videos and stay updated.", ytBtn: "Visit Channel",
+                    videosViewTitle: "Videos Section", articlesViewTitle: "Articles Section",
+                    articlesTitle: "Articles", articlesDesc: "My writings about technology and programming.", articlesBtn: "Read",
+                    tabHome: "Home", tabVideos: "Videos", tabArticles: "Articles",
+                    watchText: "Watch",
+                    video1Title: "Harms of packaged products", video1Date: "April 2, 2023",
+                    video2Title: "Bayati Kurd Mugham", video2Date: "April 12, 2024",
+                    customColor: "Custom"
+                },
+                ru: {
+                    brand: "Тариэль Гусейнзаде", 
+                    linkAbout: "О нас", linkLicense: "Лицензия Open Source", linkHelp: "Помощь и поддержка", linkSettings: "Настройки", 
+                    settingsTitle: "Настройки", aboutTitle: "О нас", langTitle: "Язык (Language)", accessTitle: "Спец. возможности", labelText: "Размер текста", labelAnim: "Анимации", textNorm: "Норма", textLarge: "Крупный", animOn: "Вкл", animOff: "Выкл", themeTitle: "Тема", themeLight: "Светлая", themeDark: "Тёмная", themeSystem: "Системная", colorTitle: "Цветовая палитра", welcome: "Добро пожаловать!", welcomeDesc: "Прокрутите вниз, чтобы узнать больше", 
+                    ytTitle: "Мой YouTube канал", ytDesc: "Подпишитесь на мой канал, чтобы смотреть видео и быть в курсе новостей.", ytBtn: "Посетить канал",
+                    videosViewTitle: "Раздел Видео", articlesViewTitle: "Раздел Статьи",
+                    articlesTitle: "Статьи", articlesDesc: "Мои статьи о технологиях и программировании.", articlesBtn: "Читать",
+                    tabHome: "Главная", tabVideos: "Видео", tabArticles: "Статьи",
+                    watchText: "Смотреть",
+                    video1Title: "Вред упакованных продуктов", video1Date: "2 апреля 2023",
+                    video2Title: "Мугам Баяты-Кюрд", video2Date: "12 апреля 2024",
+                    customColor: "Свой"
+                }
+            };
+
+            function applyLanguage(lang) {
+                langBtns.forEach(btn => { btn.classList.remove('active'); if(btn.dataset.lang === lang) btn.classList.add('active'); });
+                const t = translations[lang];
+                document.getElementById('txt-brand').textContent = t.brand;
+                document.getElementById('link-about').textContent = t.linkAbout;
+                document.getElementById('link-license').textContent = t.linkLicense;
+                document.getElementById('link-help').textContent = t.linkHelp;
+                document.getElementById('link-settings').textContent = t.linkSettings;
+                
+                document.getElementById('txt-settings-title').textContent = t.settingsTitle;
+                document.getElementById('txt-about-title').textContent = t.aboutTitle;
+                document.getElementById('txt-lang-title').textContent = t.langTitle;
+                document.getElementById('txt-access-title').textContent = t.accessTitle;
+                document.getElementById('txt-label-text').textContent = t.labelText;
+                document.getElementById('txt-label-anim').textContent = t.labelAnim;
+                document.getElementById('text-normal').textContent = t.textNorm;
+                document.getElementById('text-large').textContent = t.textLarge;
+                document.getElementById('anim-on').textContent = t.animOn;
+                document.getElementById('anim-off').textContent = t.animOff;
+                document.getElementById('txt-theme-title').textContent = t.themeTitle;
+                document.getElementById('theme-light').textContent = t.themeLight;
+                document.getElementById('theme-dark').textContent = t.themeDark;
+                document.getElementById('theme-system').textContent = t.themeSystem;
+                document.getElementById('txt-color-title').textContent = t.colorTitle;
+                document.getElementById('txt-welcome').textContent = t.welcome;
+                document.getElementById('txt-welcome-desc').textContent = t.welcomeDesc;
+                document.getElementById('txt-yt-title').textContent = t.ytTitle;
+                document.getElementById('txt-yt-desc').textContent = t.ytDesc;
+                document.getElementById('txt-yt-btn').textContent = t.ytBtn;
+                
+                document.getElementById('txt-videos-view-title').textContent = t.videosViewTitle;
+                document.getElementById('txt-articles-view-title').textContent = t.articlesViewTitle;
+                
+                document.getElementById('txt-articles-title').textContent = t.articlesTitle;
+                document.getElementById('txt-articles-desc').textContent = t.articlesDesc;
+                document.getElementById('txt-articles-btn').textContent = t.articlesBtn;
+
+                document.getElementById('txt-tab-home').textContent = t.tabHome;
+                document.getElementById('txt-tab-videos').textContent = t.tabVideos;
+                document.getElementById('txt-tab-articles').textContent = t.tabArticles;
+                
+                document.getElementById('txt-video-1-title').textContent = t.video1Title;
+                document.getElementById('txt-video-1-date').textContent = t.video1Date;
+                document.getElementById('txt-watch-1').innerHTML = t.watchText + ' &rarr;';
+                
+                document.getElementById('txt-video-2-title').textContent = t.video2Title;
+                document.getElementById('txt-video-2-date').textContent = t.video2Date;
+                document.getElementById('txt-watch-2').innerHTML = t.watchText + ' &rarr;';
+
+                document.querySelector('.nav-item[data-target="home"]').setAttribute('data-text', t.tabHome);
+                document.querySelector('.nav-item[data-target="videos"]').setAttribute('data-text', t.tabVideos);
+                document.querySelector('.nav-item[data-target="articles"]').setAttribute('data-text', t.tabArticles);
+                customColorBtn.setAttribute('title', t.customColor);
+                localStorage.setItem('lang', lang);
+            }
+            langBtns.forEach(btn => btn.addEventListener('click', () => applyLanguage(btn.dataset.lang)));
+
+            function setTextSize(size) { if(size==='large'){document.documentElement.classList.add('large-text'); textLargeBtn.classList.add('active'); textNormalBtn.classList.remove('active');}else{document.documentElement.classList.remove('large-text'); textNormalBtn.classList.add('active'); textLargeBtn.classList.remove('active');} localStorage.setItem('textSize', size); }
+            function setAnimation(state) { if(state==='off'){document.documentElement.classList.add('no-anim'); animOffBtn.classList.add('active'); animOnBtn.classList.remove('active');}else{document.documentElement.classList.remove('no-anim'); animOnBtn.classList.add('active'); animOffBtn.classList.remove('active');} localStorage.setItem('animation', state); }
+            textNormalBtn.addEventListener('click', () => setTextSize('normal')); textLargeBtn.addEventListener('click', () => setTextSize('large')); animOnBtn.addEventListener('click', () => setAnimation('on')); animOffBtn.addEventListener('click', () => setAnimation('off'));
+            
+            let rainbowInterval;
+            function startRainbow() { let hue = 0; if (rainbowInterval) clearInterval(rainbowInterval); rainbowInterval = setInterval(() => { hue = (hue + 1) % 360; document.documentElement.style.setProperty('--primary-color', `hsl(${hue}, 100%, 50%)`); }, 50); }
+            function stopRainbow() { if (rainbowInterval) { clearInterval(rainbowInterval); rainbowInterval = null; } }
+
+            function applyColor(color) {
+                if (color === 'rainbow') {
+                    startRainbow();
+                    document.body.classList.add('rainbow-mode');
+                    localStorage.setItem('primaryColor', 'rainbow');
+                } else {
+                    stopRainbow();
+                    document.body.classList.remove('rainbow-mode');
+                    document.documentElement.style.setProperty('--primary-color', color);
+                    localStorage.setItem('primaryColor', color);
+                    if (!color.startsWith('#007bff') && !color.startsWith('#e74c3c') && !color.startsWith('#28a745') && !color.startsWith('#ffc107') && !color.startsWith('#9b59b6')) { customColorBtn.style.background = color; }
+                }
+                colorBtns.forEach(btn => { btn.classList.remove('active'); if (btn.getAttribute('data-color') === color) { btn.classList.add('active'); } else if (color !== 'rainbow' && !btn.getAttribute('data-color') && btn.id === 'custom-color-btn') { btn.classList.add('active'); } });
+            }
+            colorBtns.forEach(btn => { btn.addEventListener('click', () => { const color = btn.getAttribute('data-color'); if (color) applyColor(color); }); });
+
+            function applyTheme(n){themeLightBtn.classList.remove('active');themeDarkBtn.classList.remove('active');themeSystemBtn.classList.remove('active');if(n==='light')themeLightBtn.classList.add('active');else if(n==='dark')themeDarkBtn.classList.add('active');else themeSystemBtn.classList.add('active');localStorage.setItem('theme',n);let e=n;if(n==='system')e=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(e==='dark')document.body.classList.add('dark-theme');else document.body.classList.remove('dark-theme');}
+            themeLightBtn.addEventListener('click',()=>applyTheme('light'));themeDarkBtn.addEventListener('click',()=>applyTheme('dark'));themeSystemBtn.addEventListener('click',()=>applyTheme('system'));window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('theme')==='system')applyTheme('system');});
+
+            applyTheme(localStorage.getItem('theme') || 'system');
+            const savedColor = localStorage.getItem('primaryColor') || 'rainbow'; 
+            applyColor(savedColor);
+            applyLanguage(localStorage.getItem('lang') || 'az');
+            setTextSize(localStorage.getItem('textSize') || 'normal');
+            setAnimation(localStorage.getItem('animation') || 'on');
+        });
+    </script>
 </body>
 </html>

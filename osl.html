@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisenziya - Taryel Hüseynzadə</title>
+    <style>
+        :root {
+            --primary-color: #007bff; 
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --card-bg: #fff;
+            --header-bg: #fff;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body.dark-theme {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --header-bg: #1e1e1e;
+            --shadow: rgba(255,255,255,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s, transform 0.2s;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+            transform: translateX(-3px);
+        }
+
+        /* Material Back Icon SVG Style */
+        .back-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        pre {
+            background-color: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Material Design Back Icon -->
+        <a href="javascript:history.back()" class="back-btn" aria-label="Geri">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+        <h1>Açıq Mənbə Lisenziyası</h1>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>MIT License</h2>
+            <p>Copyright &copy; 2025 Taryel Hüseynzadə</p>
+            <pre>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </pre>
+        </div>
+        
+        <div class="card">
+            <h2>İstifadə olunan resurslar</h2>
+            <ul>
+                <li>Google Fonts (Segoe UI, Arial)</li>
+                <li>Material Design Icons (SVG formatında)</li>
+                <li>Unsplash Images (Banner üçün)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Temanı yüklə
+        const savedTheme = localStorage.getItem('theme') || 'system';
+        const applyTheme = (theme) => {
+            let activeTheme = theme;
+            if (theme === 'system') {
+                activeTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            if (activeTheme === 'dark') document.body.classList.add('dark-theme');
+            else document.body.classList.remove('dark-theme');
+        };
+        applyTheme(savedTheme);
+
+        // Rəngi yüklə
+        const savedColor = localStorage.getItem('primaryColor');
+        if(savedColor && savedColor !== 'rainbow') {
+            document.documentElement.style.setProperty('--primary-color', savedColor);
+        }
+    </script>
+</body>
+</html>
