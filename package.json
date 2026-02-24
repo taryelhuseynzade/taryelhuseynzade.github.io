@@ -1,0 +1,11 @@
+{
+  "name": "th-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx http-server ."
+  },
+  "author": "",
+  "license": "ISC"
+}
