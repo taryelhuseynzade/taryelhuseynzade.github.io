@@ -313,7 +313,7 @@
         <nav id="fullscreen-menu">
             <button id="menu-close">&times;</button>
             <ul>
-                <li><a href="#about" id="link-about">Haqqında</a></li>
+                <li><a href="about.html" id="link-about">Haqqında</a></li>
                 <li><a href="osl.html" id="link-license">Açıq mənbə lisenziyası</a></li>
                 <li><a href="help.html" id="link-help">Kömək & Dəstək</a></li>
                 <li><a href="#settings" id="link-settings">Ayarlar</a></li>
@@ -399,39 +399,6 @@
         </div>
     </aside>
 
-    <!-- HAQQINDA PANELİ (WINDOW) -->
-    <aside id="about-panel" class="activity-panel">
-        <div class="panel-header" id="about-header">
-            <button id="about-back-btn" class="panel-back-btn">
-                <!-- Material Design Back Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-            </button>
-            <div class="drag-handle"><h2 id="txt-about-title">Haqqında</h2></div>
-            <!-- Windows Controls -->
-            <div class="window-controls">
-                <button class="win-btn min-btn" title="Minimize">
-                    <svg width="10" height="1" viewBox="0 0 10 1" fill="currentColor"><rect width="10" height="1"></rect></svg>
-                </button>
-                <button class="win-btn max-btn" title="Maximize">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="9" height="9"></rect></svg>
-                </button>
-                <button class="win-btn close-btn" title="Close">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 1L9 9M9 1L1 9"/></svg>
-                </button>
-            </div>
-        </div>
-        <div class="panel-content">
-            <div class="profile-header">
-                <img src="logo.jpg" alt="Logo">
-                <h2>Taryel Hüseynzadə</h2>
-            </div>
-            <a href="https://GitHub.com/TaryelHuseynzade/TaryelHuseynzade.github.io" target="_blank" class="github-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                Mənbə Kodu
-            </a>
-        </div>
-    </aside>
-
     <!-- VIEWS -->
     <div id="view-home" class="tab-view active">
         <section id="banner">
@@ -502,10 +469,8 @@
             const fullscreenMenu = document.getElementById('fullscreen-menu');
             
             const settingsPanel = document.getElementById('settings-panel');
-            const aboutPanel = document.getElementById('about-panel');
             
             const settingsBackBtn = document.getElementById('settings-back-btn');
-            const aboutBackBtn = document.getElementById('about-back-btn');
             const specialFeaturesBtn = document.getElementById('special-features-btn');
 
             const tabItems = document.querySelectorAll('.nav-item');
@@ -609,7 +574,6 @@
             }
 
             setupWindowControls(settingsPanel);
-            setupWindowControls(aboutPanel);
 
             // --- MENU LINKS ---
             function openPanel(panel) {
@@ -623,14 +587,9 @@
             document.querySelector('a[href="#settings"]').addEventListener('click', (e) => {
                 e.preventDefault(); openPanel(settingsPanel);
             });
-
-            document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
-                e.preventDefault(); openPanel(aboutPanel);
-            });
             
             // Mobil Geri düymələri
             settingsBackBtn.addEventListener('click', () => { settingsPanel.classList.remove('active'); });
-            aboutBackBtn.addEventListener('click', () => { aboutPanel.classList.remove('active'); });
 
 
             // --- STANDARD JS (Scroll, Tabs, Theme, etc.) ---
@@ -738,7 +697,6 @@
                 document.getElementById('link-settings').textContent = t.linkSettings;
                 
                 document.getElementById('txt-settings-title').textContent = t.settingsTitle;
-                document.getElementById('txt-about-title').textContent = t.aboutTitle;
                 document.getElementById('txt-lang-title').textContent = t.langTitle;
                 document.getElementById('txt-access-title').textContent = t.accessTitle;
                 document.getElementById('txt-label-text').textContent = t.labelText;
